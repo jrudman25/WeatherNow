@@ -1,0 +1,20 @@
+/* shared/app.css uses keyframe mount animations for frameworks without a
+   transition system. Angular 20.2+ has animate.enter bindings, which apply a
+   class on insertion — these classes run the same shared keyframes. The
+   always-on animations are disabled here so enter only animates once. */
+:host {
+  display: block;
+}
+
+.error,
+.report {
+  animation: none;
+}
+
+.anim-fade-in {
+  animation: fade-in 0.3s ease;
+}
+
+.anim-fly-in {
+  animation: fly-in 0.6s ease;
+}

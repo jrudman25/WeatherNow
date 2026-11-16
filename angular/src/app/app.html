@@ -1,0 +1,62 @@
+<main class="scene" [class]="theme()">
+  <div class="sky" aria-hidden="true"></div>
+
+  <section class="panel">
+    <h1 class="wordmark">WeatherNow</h1>
+
+    <form (ngSubmit)="search()">
+      <input
+        [ngModel]="query()"
+        (ngModelChange)="query.set($event)"
+        name="query"
+        placeholder="city or zip"
+        aria-label="City or zip code"
+        autocomplete="off"
+      />
+      <button type="submit" [disabled]="loading()">{{ loading() ? '...' : 'Search' }}</button>
+    </form>
+
+    @if (weather()?.demo) {
+      <p class="demo-banner" animate.enter="anim-fade-in">
+        Sample data: add an API key for live results.
+      </p>
+    }
+
+    @if (error()) {
+      <p class="error" animate.enter="anim-fade-in">{{ error() }}</p>
+    }
+
+    @if (weather() && !loading()) {
+      @let w = weather()!;
+      <div class="report" animate.enter="anim-fly-in">
+        <h2>
+          {{ w.name }}, {{ w.sys.country }}@if (w.demo) {<span class="demo">demo data</span>}
+        </h2>
+        <p class="temp">
+          {{ round(w.main.temp) }}<span class="deg">&deg;F</span>
+          <em>/ {{ tempC() }}&deg;C</em>
+        </p>
+        <p class="desc">{{ w.weather[0].description }}</p>
+
+        <dl>
+          <div>
+            <dt>Clouds</dt>
+            <dd>{{ w.clouds.all }}%</dd>
+          </div>
+          <div>
+            <dt>Wind</dt>
+            <dd>{{ round(w.wind.speed) }} mph at {{ round(w.wind.deg) }}&deg;</dd>
+          </div>
+          <div>
+            <dt>Humidity</dt>
+            <dd>{{ w.main.humidity }}%</dd>
+          </div>
+          <div>
+            <dt>As of</dt>
+            <dd>{{ localTime() }}</dd>
+          </div>
+        </dl>
+      </div>
+    }
+  </section>
+</main>
