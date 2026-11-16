@@ -1,0 +1,52 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  impl:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        impl: [svelte, preact, vue, lit, angular]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: ${{ matrix.impl }}/package-lock.json
+
+      # Secret files are gitignored, so CI recreates them from the committed
+      # examples. angular needs environment.ts to compile; alpine needs
+      # config.js for build.mjs staging; .env is optional everywhere.
+      - name: Create env file from committed example
+        working-directory: ${{ matrix.impl }}
+        run: |
+          [ -f .env.example ] && cp .env.example .env || true
+          [ -f config.example.js ] && cp config.example.js config.js || true
+          [ -f src/environments/environment.example.ts ] && cp src/environments/environment.example.ts src/environments/environment.ts || true
+
+      - name: Install and build
+        working-directory: ${{ matrix.impl }}
+        run: npm ci && npm run build
+
+  alpine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Stage dist
+        working-directory: alpine
+        run: |
+          cp config.example.js config.js
+          node build.mjs
+          test -f dist/alpine/index.html
+          test -f dist/shared/weather.js
