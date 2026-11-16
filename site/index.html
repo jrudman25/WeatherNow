@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d12" />
+    <meta
+      name="description"
+      content="WeatherNow: the same weather app implemented in several frontend frameworks, compared side by side."
+    />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="site.css" />
+    <title>WeatherNow — every framework</title>
+  </head>
+  <body>
+    <main class="page">
+      <h1 class="wordmark">WeatherNow</h1>
+      <p class="tagline">
+        The same weather app, implemented in <span id="count">several</span> frameworks.
+        Click a name to open it; click a column header to sort.
+      </p>
+
+      <table class="stats">
+        <thead>
+          <tr>
+            <th data-key="name" data-label="Implementation">Implementation</th>
+            <th class="num" data-key="jsGzip" data-label="JS (gzip)">JS (gzip)</th>
+            <th class="num" data-key="cssGzip" data-label="CSS (gzip)">CSS (gzip)</th>
+            <th class="num" data-key="loc" data-label="Lines of code">Lines of code</th>
+            <th class="num" data-key="deps" data-label="Dependencies">Dependencies</th>
+            <th class="num" data-key="buildMs" data-label="Build">Build</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          <tr><td colspan="6" class="loading">loading stats…</td></tr>
+        </tbody>
+      </table>
+
+      <p class="foot">
+        Every implementation renders the identical app from
+        <a href="https://github.com/jrudman25/WeatherNow">shared code</a> — only the
+        framework's expression differs. Stats regenerate on each build.
+      </p>
+    </main>
+
+    <script type="module">
+      const KB = (n) => (n / 1024).toFixed(1) + ' kB'
+      const res = await fetch('stats.json')
+      const { implementations } = await res.json()
+      const rows = Object.entries(implementations).map(([name, s]) => ({ name, ...s }))
+      document.getElementById('count').textContent = rows.length
+
+      const tbody = document.getElementById('rows')
+      const headers = [...document.querySelectorAll('th[data-key]')]
+      let sortKey = 'name'
+      let sortAsc = true
+
+      const fmt = {
+        name: (r) => `<a href="./${r.name}/">${r.name}</a>`,
+        jsGzip: (r) => KB(r.jsGzip),
+        cssGzip: (r) => KB(r.cssGzip),
+        loc: (r) => r.loc,
+        deps: (r) => r.deps,
+        buildMs: (r) => (r.buildMs === null ? '—' : (r.buildMs / 1000).toFixed(1) + 's'),
+      }
+
+      function render() {
+        rows.sort((a, b) => {
+          if (a[sortKey] == null) return 1
+          if (b[sortKey] == null) return -1
+          const cmp = sortKey === 'name' ? a.name.localeCompare(b.name) : a[sortKey] - b[sortKey]
+          return sortAsc ? cmp : -cmp
+        })
+        tbody.innerHTML = rows
+          .map(
+            (r) => `<tr>
+            <td>${fmt.name(r)}</td>
+            <td class="num">${fmt.jsGzip(r)}</td>
+            <td class="num">${fmt.cssGzip(r)}</td>
+            <td class="num">${fmt.loc(r)}</td>
+            <td class="num">${fmt.deps(r)}</td>
+            <td class="num">${fmt.buildMs(r)}</td>
+          </tr>`
+          )
+          .join('')
+        headers.forEach((h) => {
+          const active = h.dataset.key === sortKey
+          h.textContent = h.dataset.label + (active ? (sortAsc ? ' ▲' : ' ▼') : '')
+          h.setAttribute('aria-sort', active ? (sortAsc ? 'ascending' : 'descending') : 'none')
+        })
+      }
+
+      headers.forEach((h) =>
+        h.addEventListener('click', () => {
+          if (sortKey === h.dataset.key) {
+            sortAsc = !sortAsc
+          } else {
+            sortKey = h.dataset.key
+            sortAsc = sortKey === 'name'
+          }
+          render()
+        })
+      )
+      render()
+    </script>
+  </body>
+</html>

@@ -6,6 +6,8 @@ model, reactivity, templating, and tooling can be compared side by side. Live
 conditions come from the OpenWeatherMap API, and the backdrop shifts to match
 the current weather.
 
+**Live comparison site:** <https://weathernow-fab1e.web.app>
+
 ## Implementations
 
 | Folder | Stack | Toolchain |
@@ -25,6 +27,9 @@ the current weather.
   `README.md` (the contract)
 - `<impl>/` — one folder per stack, each self-contained with its own
   `package.json`, `README.md`, and `AGENTS.md`
+- `site/` — the aggregate comparison site and the repo's single deployable
+  artifact: a vanilla HTML/JS landing page linking every implementation with
+  live stats (bundle size, lines of code, dependencies, build time)
 
 ## Running an implementation
 
@@ -39,6 +44,18 @@ http://localhost:5176.
 
 Angular uses its own toolchain: `cd angular && npm install && npm run dev`,
 then open http://localhost:4200.
+
+## Building the comparison site
+
+```sh
+cd site
+npm run build    # builds every impl, stages dist/<name>/, emits stats.json
+npm run preview  # serves dist/ on http://localhost:5180
+```
+
+Impl dependencies must be installed first (`npm install` per impl, once).
+`npm run stage` re-stages the site from existing impl `dist/` output without
+rebuilding. Deploys to Firebase Hosting with `firebase deploy` from `site/`.
 
 ## API key (optional)
 

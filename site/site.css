@@ -1,0 +1,108 @@
+:root {
+  font-family:
+    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+  background: #0b0d12;
+  color: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background: radial-gradient(ellipse at 30% 20%, #1a2233, #0b0d12);
+}
+
+.page {
+  width: min(52rem, 100%);
+  text-align: center;
+}
+
+.wordmark {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin: 0 0 0.5rem;
+  text-shadow: 0 4px 30px rgb(0 0 0 / 0.35);
+}
+
+.tagline {
+  opacity: 0.75;
+  margin: 0 0 3rem;
+}
+
+.stats {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgb(255 255 255 / 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.stats th,
+.stats td {
+  padding: 0.9rem 1rem;
+  text-align: left;
+}
+
+.stats th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.65;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.stats th:hover {
+  opacity: 1;
+}
+
+.stats tbody tr {
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.stats tbody tr:hover {
+  background: rgb(255 255 255 / 0.07);
+}
+
+.stats .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats a {
+  color: #ffd88a;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgb(255 216 138 / 0.4);
+}
+
+.stats a:hover {
+  text-decoration-color: #ffd88a;
+}
+
+.loading {
+  opacity: 0.6;
+  text-align: center;
+}
+
+.foot {
+  margin-top: 3rem;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.foot a {
+  color: #ffd88a;
+}

@@ -13,6 +13,7 @@
           "options": {
             "outputPath": "dist",
             "index": "src/index.html",
+            "baseHref": "./",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [{ "glob": "**/*", "input": "public" }],
