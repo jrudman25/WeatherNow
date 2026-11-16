@@ -1,0 +1,10 @@
+# Normalize all text files to LF in the repo (silences CRLF warnings and
+# keeps checkouts identical across Windows/Unix). Binaries are excluded.
+* text=auto eol=lf
+
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
