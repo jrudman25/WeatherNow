@@ -9,7 +9,7 @@ the sky outside.
 - City or ZIP search with live conditions
 - Animated gradient sky themes driven by current weather
 - Temperature (F/C), conditions, cloud cover, wind speed and direction, humidity
-- Static site, deploys to Firebase Hosting
+- Static site, builds to `dist/`
 
 ## Getting started
 
@@ -21,11 +21,10 @@ npm run dev
 
 Get a free API key at <https://home.openweathermap.org/api_keys>.
 
-## Build and deploy
+## Build
 
 ```sh
-npm run build       # outputs to dist/
-firebase deploy     # serves dist/ via Firebase Hosting
+npm run build       # outputs to dist/, deployable to any static host
 ```
 
 ## Notes

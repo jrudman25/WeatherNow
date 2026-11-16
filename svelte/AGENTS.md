@@ -8,14 +8,14 @@
 - Framework-agnostic app code (OWM fetch, theme map, derived-value helpers,
   full stylesheet, sample payload) lives in `../shared/` — import it via
   `../../shared/` paths rather than duplicating
-- Static deploy to Firebase Hosting (`dist/` output)
+- Builds to `dist/`; no per-implementation hosting config (the repo plans a
+  single aggregate `site/` deploy, not one deploy per framework)
 
 ## Commands
 
 - `npm run dev` - Vite dev server (default port 5173)
 - `npm run build` - production build to `dist/`
 - `npm run preview` - serve the production build locally
-- `firebase deploy` - deploy `dist/` to Firebase Hosting
 
 ## Conventions
 
@@ -30,7 +30,7 @@
 
 ## Notes
 
-- `.firebaserc` points to a `weathernow` Firebase project. The old app used
-  `weathernow-old`; verify the target before the first real deploy
+- Firebase deploy config lives at `../site/` (moved out of this impl when the
+  repo became a playground); run `firebase deploy` from `site/`, not here
 - 2 low-severity `npm audit` findings via `deepmerge` inside
   `@sveltejs/vite-plugin-svelte` (build-time only, no fix published yet)
