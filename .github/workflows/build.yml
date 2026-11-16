@@ -50,3 +50,52 @@ jobs:
           node build.mjs
           test -f dist/alpine/index.html
           test -f dist/shared/weather.js
+
+  deploy:
+    needs: [impl, alpine]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: "**/package-lock.json"
+
+      # Same gitignored-file recreation as the impl jobs — site/build.mjs
+      # runs each impl's build and angular/alpine need these to succeed.
+      - name: Create env files from committed examples
+        run: |
+          cp angular/src/environments/environment.example.ts angular/src/environments/environment.ts
+          cp alpine/config.example.js alpine/config.js
+
+      - name: Install impl dependencies
+        run: |
+          for d in svelte preact vue lit angular; do
+            npm --prefix "$d" ci
+          done
+
+      - name: Build and stage site
+        working-directory: site
+        run: npm run build
+
+      # Guard the deploy: catch missing staging and absolute asset refs that
+      # would 404 under /<name>/ subpaths even though impl builds passed.
+      - name: Verify staged output
+        working-directory: site
+        run: |
+          test -f dist/stats.json
+          for d in svelte preact vue lit alpine angular; do
+            test -f "dist/$d/index.html"
+          done
+          ! grep -r 'src="/assets/' dist/*/index.html
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: weathernow-fab1e
+          channelId: live
+          entryPoint: site
