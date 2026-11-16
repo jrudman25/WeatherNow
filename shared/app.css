@@ -1,0 +1,238 @@
+:root {
+  font-family:
+    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+  background: #0b0d12;
+  color: #fff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgb(255 255 255 / 0.3);
+}
+
+/* Themed gradients animate via @property-registered color stops,
+   so the whole sky cross-fades when conditions change. */
+@property --c1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #0b0d12;
+}
+
+@property --c2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #1a2233;
+}
+
+.scene {
+  --c1: #0b0d12;
+  --c2: #1a2233;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.scene.clear  { --c1: #f7b733; --c2: #fc4a1a; }
+.scene.clouds { --c1: #4b5f7a; --c2: #1c2733; }
+.scene.rain   { --c1: #1e3c5a; --c2: #0a1420; }
+.scene.storm  { --c1: #3a2d52; --c2: #0d0a14; }
+.scene.snow   { --c1: #8fa8bd; --c2: #3d4c5c; }
+.scene.fog    { --c1: #6b7178; --c2: #2e3338; }
+
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse at 30% 20%, var(--c1), var(--c2));
+  transition:
+    --c1 1.4s ease,
+    --c2 1.4s ease;
+}
+
+.panel {
+  width: min(34rem, 100%);
+  text-align: center;
+}
+
+.wordmark {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin: 0 0 2rem;
+  color: #fff;
+  text-shadow: 0 4px 30px rgb(0 0 0 / 0.35);
+}
+
+form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+input,
+button {
+  font: inherit;
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 1.4rem;
+}
+
+input {
+  flex: 1;
+  background: rgb(255 255 255 / 0.14);
+  color: #fff;
+  backdrop-filter: blur(12px);
+  outline: 2px solid transparent;
+  transition: outline-color 0.2s;
+}
+
+input::placeholder {
+  color: rgb(255 255 255 / 0.55);
+}
+
+input:focus-visible {
+  outline-color: rgb(255 255 255 / 0.6);
+}
+
+button {
+  background: #fff;
+  color: #111;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Svelte uses transition:fade / in:fly directives; Preact has no built-in
+   transition system, so mount animations are plain CSS keyframes. The
+   report's key={weather.dt} forces a remount per search to replay it. */
+.error {
+  margin-top: 1rem;
+  color: #ffd7d7;
+  animation: fade-in 0.3s ease;
+}
+
+.report {
+  margin-top: 3rem;
+  color: #fff;
+  animation: fly-in 0.6s ease;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fly-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+.report h2 {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.temp {
+  font-size: clamp(4rem, 16vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin: 0.5rem 0;
+}
+
+.temp .deg {
+  font-size: 0.35em;
+  vertical-align: super;
+}
+
+.temp em {
+  font-size: 0.25em;
+  font-style: normal;
+  opacity: 0.7;
+  vertical-align: super;
+}
+
+.desc {
+  text-transform: capitalize;
+  font-size: 1.25rem;
+  margin: 0 0 2rem;
+  opacity: 0.9;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+dl > div {
+  background: rgb(255 255 255 / 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  padding: 0.9rem;
+}
+
+dt {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.65;
+}
+
+dd {
+  margin: 0.25rem 0 0;
+  font-weight: 600;
+}
+
+/* Shown when fetchWeather() returned the bundled sample payload (no API key
+   configured) rather than live data: .demo-banner explains why under the
+   form, .demo badges the payload inline next to the city name. */
+.demo-banner {
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  color: #ffd88a;
+  background: rgb(255 216 138 / 0.12);
+  border: 1px solid rgb(255 216 138 / 0.35);
+  border-radius: 999px;
+}
+
+.demo {
+  display: inline-block;
+  margin-left: 0.6rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  color: #ffd88a;
+  background: rgb(255 216 138 / 0.15);
+  border: 1px solid rgb(255 216 138 / 0.4);
+  border-radius: 999px;
+}
