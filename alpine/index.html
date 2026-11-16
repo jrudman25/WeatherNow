@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d12" />
+    <meta
+      name="description"
+      content="WeatherNow: a modern weather experience. Live conditions from OpenWeatherMap."
+    />
+    <base href="/alpine/" />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="../shared/app.css" />
+    <link rel="stylesheet" href="alpine.css" />
+    <title>WeatherNow</title>
+    <script src="config.js"></script>
+    <script type="module" src="app.js"></script>
+    <script defer src="vendor/alpine.min.js"></script>
+  </head>
+  <body>
+    <main class="scene" :class="theme" x-data="weatherApp">
+      <div class="sky" aria-hidden="true"></div>
+
+      <section class="panel">
+        <h1 class="wordmark">WeatherNow</h1>
+
+        <form @submit.prevent="search">
+          <input
+            x-model="query"
+            placeholder="city or zip"
+            aria-label="City or zip code"
+            autocomplete="off"
+          />
+          <button type="submit" :disabled="loading" x-text="loading ? '...' : 'Search'">Search</button>
+        </form>
+
+        <p
+          class="demo-banner"
+          x-show="weather?.demo"
+          x-transition
+          style="display: none"
+        >
+          Sample data: add an API key for live results.
+        </p>
+
+        <p class="error" x-show="error" x-transition x-text="error" style="display: none"></p>
+
+        <template x-if="weather && !loading">
+          <div
+            class="report"
+            x-transition:enter="report-enter"
+            x-transition:enter-start="report-enter-start"
+          >
+            <h2>
+              <span x-text="weather.name + ', ' + weather.sys.country"></span>
+              <template x-if="weather.demo"><span class="demo">demo data</span></template>
+            </h2>
+            <p class="temp">
+              <span x-text="Math.round(weather.main.temp)"></span><span class="deg">&deg;F</span>
+              <em x-text="'/ ' + tempC + '°C'"></em>
+            </p>
+            <p class="desc" x-text="weather.weather[0].description"></p>
+
+            <dl>
+              <div>
+                <dt>Clouds</dt>
+                <dd x-text="weather.clouds.all + '%'"></dd>
+              </div>
+              <div>
+                <dt>Wind</dt>
+                <dd
+                  x-text="Math.round(weather.wind.speed) + ' mph at ' + Math.round(weather.wind.deg) + '°'"
+                ></dd>
+              </div>
+              <div>
+                <dt>Humidity</dt>
+                <dd x-text="weather.main.humidity + '%'"></dd>
+              </div>
+              <div>
+                <dt>As of</dt>
+                <dd x-text="localTime"></dd>
+              </div>
+            </dl>
+          </div>
+        </template>
+      </section>
+    </main>
+  </body>
+</html>

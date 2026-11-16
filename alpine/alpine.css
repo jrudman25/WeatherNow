@@ -1,0 +1,19 @@
+/* shared/app.css drives mount animations via CSS keyframes for frameworks
+   without a transition system. Alpine provides x-transition instead, so the
+   keyframe animations are disabled here and enter phases come from the
+   classes referenced by the x-transition:* directives in index.html. */
+.error,
+.report {
+  animation: none;
+}
+
+.report-enter {
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.report-enter-start {
+  opacity: 0;
+  transform: translateY(24px);
+}
