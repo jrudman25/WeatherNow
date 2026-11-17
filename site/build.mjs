@@ -19,8 +19,9 @@ const IMPLS = [
   { name: 'preact', dir: '../preact', dist: '../preact/dist' },
   { name: 'vue', dir: '../vue', dist: '../vue/dist' },
   { name: 'lit', dir: '../lit', dist: '../lit/dist' },
-  // alpine stages its own dist as { alpine/, shared/ }; merge both halves
+  // alpine + vanilla stage their own dist as { <name>/, shared/ }; merge both halves
   { name: 'alpine', dir: '../alpine', dist: '../alpine/dist/alpine', shared: '../alpine/dist/shared' },
+  { name: 'vanilla', dir: '../vanilla', dist: '../vanilla/dist/vanilla', shared: '../vanilla/dist/shared' },
   // angular emits to dist/browser
   { name: 'angular', dir: '../angular', dist: '../angular/dist/browser' },
 ]

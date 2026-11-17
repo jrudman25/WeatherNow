@@ -17,6 +17,7 @@ the current weather.
 | `vue/` | Vue 3 (Composition API, `<script setup>`) | Vite |
 | `lit/` | Lit 3 (Web Components, shadow DOM) | Vite, no plugin |
 | `alpine/` | Alpine.js 3 (vendored) | No build step — `server.mjs` |
+| `vanilla/` | Plain DOM APIs (baseline) | No build step — `server.mjs` |
 | `angular/` | Angular 22 (standalone, signals, zoneless) + TypeScript | Angular CLI (`angular.json`) |
 
 ## Layout
@@ -39,8 +40,8 @@ npm install
 npm run dev
 ```
 
-Alpine has no bundler: `cd alpine && npm run dev`, then open
-http://localhost:5176.
+Alpine and Vanilla have no bundler: `cd alpine` (or `vanilla`) `&& npm run
+dev`, then open http://localhost:5176 (vanilla: http://localhost:5179).
 
 Angular uses its own toolchain: `cd angular && npm install && npm run dev`,
 then open http://localhost:4200.

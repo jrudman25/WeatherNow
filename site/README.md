@@ -29,5 +29,6 @@ Firebase project; the site is live at https://weathernow-fab1e.web.app.
 
 - Implementations are served at `/<name>/` subpaths — Vite impls build with
   `base: './'`, Angular with `baseHref: './'`, and Alpine's `<base href="/alpine/">`
-  already matches its subpath.
-- Alpine additionally merges its `dist/shared/` staging into `site/dist/shared/`.
+  + Vanilla's `<base href="/vanilla/">` already match their subpaths.
+- Alpine and Vanilla additionally merge their `dist/shared/` staging into
+  `site/dist/shared/`.

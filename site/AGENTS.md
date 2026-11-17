@@ -4,7 +4,7 @@
 
 - Vanilla HTML/JS/CSS landing page — intentionally no framework
 - `build.mjs` orchestrates the whole site build: runs `npm run build` in each
-  impl, stages `dist/<name>/`, merges alpine's `dist/shared/`, computes stats
+  impl, stages `dist/<name>/`, merges alpine's and vanilla's `dist/shared/`, computes stats
   (bundle bytes+gzip via zlib, LOC, dep counts, build time) into
   `dist/stats.json`
 - `server.mjs` — dependency-free static server for `dist/` on :5180
@@ -24,6 +24,6 @@
 
 - Impls must build with relative asset URLs to work at `/<name>/` subpaths:
   `base: './'` in vite.config (lit uses `vite build --base=./`), `baseHref` in
-  angular.json; alpine's `<base href="/alpine/">` already aligns
+  angular.json; alpine's and vanilla's `<base href="/<name>/">` already align
 - stats.json is generated data — the landing page fetches it at runtime
 - `buildMs` is `null` when staged via `--skip-builds`; the table renders `—`

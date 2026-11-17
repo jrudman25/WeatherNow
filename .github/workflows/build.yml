@@ -51,8 +51,25 @@ jobs:
           test -f dist/alpine/index.html
           test -f dist/shared/weather.js
 
+  vanilla:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Stage dist
+        working-directory: vanilla
+        run: |
+          cp config.example.js config.js
+          node build.mjs
+          test -f dist/vanilla/index.html
+          test -f dist/shared/weather.js
+
   deploy:
-    needs: [impl, alpine]
+    needs: [impl, alpine, vanilla]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -70,6 +87,7 @@ jobs:
         run: |
           cp angular/src/environments/environment.example.ts angular/src/environments/environment.ts
           cp alpine/config.example.js alpine/config.js
+          cp vanilla/config.example.js vanilla/config.js
 
       - name: Install impl dependencies
         run: |
@@ -87,7 +105,7 @@ jobs:
         working-directory: site
         run: |
           test -f dist/stats.json
-          for d in svelte preact vue lit alpine angular; do
+          for d in svelte preact vue lit alpine angular vanilla; do
             test -f "dist/$d/index.html"
           done
           ! grep -r 'src="/assets/' dist/*/index.html

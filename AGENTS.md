@@ -48,7 +48,7 @@
 
 - Per impl: `cd <impl> && npm install && npm run dev`
   - Vite impls (svelte, preact, vue, lit): Vite dev server
-  - `alpine/`: `server.mjs` on :5176
+  - `alpine/`: `server.mjs` on :5176; `vanilla/`: `server.mjs` on :5179
   - `angular/`: `ng serve` on :4200
 - `npm run build` produces `dist/` (Angular: `dist/browser/`; Alpine:
   `build.mjs` stages `dist/` preserving the `shared/` sibling layout)
