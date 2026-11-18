@@ -1,4 +1,4 @@
-# WeatherNow
+# WeatherNow (Svelte)
 
 A modern, art-directed weather experience built with Svelte 5 and Vite. Live
 conditions come from the OpenWeatherMap API, and the backdrop shifts to match

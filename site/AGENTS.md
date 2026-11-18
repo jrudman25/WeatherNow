@@ -10,7 +10,7 @@
 - `server.mjs` — dependency-free static server for `dist/` on :5180
 - Firebase deploy target: project ID `weathernow-fab1e` (display name
   `weathernow`) — `.firebaserc` must use the ID, not the display name
-  (`firebase.json` → `public: dist`, SPA rewrite `**` → `/index.html`)
+  (`firebase.json` → `public: dist`; no rewrites, so missing files 404)
 
 ## Commands
 
@@ -26,4 +26,4 @@
   `base: './'` in vite.config (lit uses `vite build --base=./`), `baseHref` in
   angular.json; alpine's and vanilla's `<base href="/<name>/">` already align
 - stats.json is generated data — the landing page fetches it at runtime
-- `buildMs` is `null` when staged via `--skip-builds`; the table renders `—`
+- `buildMs` is `null` when staged via `--skip-builds`; the table renders `n/a`

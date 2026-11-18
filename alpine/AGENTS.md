@@ -9,8 +9,8 @@
 - Framework-agnostic app code (OWM fetch, theme map, derived-value helpers,
   full stylesheet, sample payload) lives in `../shared/` — imported via native
   ES modules and `<link>` tags
-- `build.mjs` stages `dist/`; no per-implementation hosting config (the repo
-  plans a single aggregate site, not one deploy per framework)
+- `build.mjs` stages `dist/`; no per-implementation hosting config (`site/`
+  owns the repo's single deploy)
 
 ## Commands
 

@@ -13,14 +13,15 @@
   full stylesheet, sample payload) lives in `../shared/` — `src/styles.css`
   `@import`s `shared/app.css` as the global stylesheet; `weather.js` is
   imported directly (requires `allowJs` in tsconfig)
-- Builds to `dist/browser/`; no per-implementation hosting config (the repo
-  plans a single aggregate site, not one deploy per framework)
+- Builds to `dist/browser/`; no per-implementation hosting config (`site/`
+  owns the repo's single deploy)
 
 ## Commands
 
 - `npm run dev` - `ng serve` (default port 4200)
 - `npm run build` - `ng build` production build to `dist/browser/`
-- `npm run preview` - serves `dist/browser/` on :5179
+- `npm run preview` - `ng serve` production build on :4201 (in-memory, not
+  from `dist/browser/`)
 
 ## Conventions
 

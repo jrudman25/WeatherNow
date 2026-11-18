@@ -13,6 +13,8 @@ the current weather.
 | Folder | Stack | Toolchain |
 |---|---|---|
 | `svelte/` | Svelte 5 (runes) | Vite |
+| `react/` | React 19 (hooks, `createRoot` + StrictMode) | Vite |
+| `solid/` | Solid 1.9 (signals, compiled, no VDOM) | Vite |
 | `preact/` | Preact 11 (hooks) | Vite |
 | `vue/` | Vue 3 (Composition API, `<script setup>`) | Vite |
 | `lit/` | Lit 3 (Web Components, shadow DOM) | Vite, no plugin |
@@ -35,7 +37,7 @@ the current weather.
 ## Running an implementation
 
 ```sh
-cd svelte          # or preact, vue, lit
+cd svelte          # or react, solid, preact, vue, lit
 npm install
 npm run dev
 ```
@@ -62,8 +64,8 @@ rebuilding. Deploys to Firebase Hosting with `firebase deploy` from `site/`.
 
 Implementations read an OpenWeatherMap key through whatever convention fits
 the stack — `.env` with `VITE_OWM_API_KEY` for the Vite apps,
-`config.js` for Alpine, `src/environments/environment.ts` for Angular. Each
-folder includes an `*.example` file documenting its format.
+`config.js` for Alpine and Vanilla, `src/environments/environment.ts` for
+Angular. Each folder includes an `*.example` file documenting its format.
 
 Without a key, `fetchWeather()` returns a bundled sample payload and the UI
 marks it as demo data, so a fresh clone still renders the full app.

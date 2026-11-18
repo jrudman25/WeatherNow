@@ -27,7 +27,7 @@ Get a free API key at <https://home.openweathermap.org/api_keys>.
 
 ```sh
 npm run build         # outputs to dist/browser/, deployable to any static host
-npm run preview       # serves dist/browser/ locally on :5179
+npm run preview       # ng serve production build on :4201 (in-memory)
 ```
 
 ## Notes

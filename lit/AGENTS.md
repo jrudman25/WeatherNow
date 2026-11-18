@@ -10,8 +10,8 @@
 - Framework-agnostic app code (OWM fetch, theme map, derived-value helpers,
   full stylesheet, sample payload) lives in `../shared/` — import it via
   `../../shared/` paths rather than duplicating
-- Builds to `dist/`; no per-implementation hosting config (the repo plans a
-  single aggregate site, not one deploy per framework)
+- Builds to `dist/`; no per-implementation hosting config (`site/` owns the
+  repo's single deploy)
 
 ## Commands
 

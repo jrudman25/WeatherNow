@@ -20,7 +20,7 @@
 - `site/` is the aggregate comparison site and single deployable artifact —
   vanilla HTML/JS landing page with no dependencies. `build.mjs` builds every
   impl, stages `dist/<name>/`, and emits `stats.json`
-- Other top-level folders (`react/`, `django/`, etc.) are empty placeholders
+- Other top-level folders (`django/`, `nextjs/`, etc.) are empty placeholders
   for future implementations.
 
 ## Conventions
@@ -34,12 +34,17 @@
 - Secret API keys by stack convention, all gitignored with a committed
   `*.example` file documenting each format:
   - Vite impls: `.env` with `VITE_OWM_API_KEY`, read via `import.meta.env`
-  - `alpine/` (no bundler): `config.js` setting `window.CONFIG.API_KEY`
+  - `alpine/` and `vanilla/` (no bundler): `config.js` setting
+    `window.CONFIG.API_KEY`
   - `angular/`: `src/environments/environment.ts`
+  - CI deploy writes all of these from the `OWM_API_KEY` GitHub Actions
+    secret (empty if unset, giving demo data). The key is public in client JS
+    by design; impl build-check jobs still copy the `*.example` files
 - Impls build with relative asset URLs so they work at `/<name>/` subpaths
   under `site/dist/`: `base: './'` in vite.config (`lit/` uses
   `vite build --base=./` to keep its no-config story), `baseHref` in
-  angular.json; `alpine/`'s `<base href="/alpine/">` already aligns
+  angular.json; `alpine/`'s `<base href="/alpine/">` and `vanilla/`'s
+  `<base href="/vanilla/">` already align
 - npm `min-release-age` is 7 days globally; pin new deps to versions
   published at least a week ago
 - `.gitattributes` normalizes text files to LF on commit
@@ -47,7 +52,7 @@
 ## Commands
 
 - Per impl: `cd <impl> && npm install && npm run dev`
-  - Vite impls (svelte, preact, vue, lit): Vite dev server
+  - Vite impls (svelte, react, solid, preact, vue, lit): Vite dev server
   - `alpine/`: `server.mjs` on :5176; `vanilla/`: `server.mjs` on :5179
   - `angular/`: `ng serve` on :4200
 - `npm run build` produces `dist/` (Angular: `dist/browser/`; Alpine:
