@@ -10,7 +10,7 @@
     />
     <link rel="icon" href="favicon.ico" />
     <link rel="stylesheet" href="site.css" />
-    <title>WeatherNow — every framework</title>
+    <title>WeatherNow: every framework</title>
   </head>
   <body>
     <main class="page">
@@ -38,7 +38,7 @@
 
       <p class="foot">
         Every implementation renders the identical app from
-        <a href="https://github.com/jrudman25/WeatherNow">shared code</a> — only the
+        <a href="https://github.com/jrudman25/WeatherNow">shared code</a>; only the
         framework's expression differs. Stats regenerate on each build.
       </p>
     </main>
@@ -61,7 +61,7 @@
         cssGzip: (r) => KB(r.cssGzip),
         loc: (r) => r.loc,
         deps: (r) => r.deps,
-        buildMs: (r) => (r.buildMs === null ? '—' : (r.buildMs / 1000).toFixed(1) + 's'),
+        buildMs: (r) => (r.buildMs === null ? 'n/a' : (r.buildMs / 1000).toFixed(1) + 's'),
       }
 
       function render() {

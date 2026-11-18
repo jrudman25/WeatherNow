@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ng serve",
     "build": "ng build",
-    "preview": "npx --yes serve dist/browser -l 5179"
+    "preview": "ng serve --configuration production --port 4201"
   },
   "dependencies": {
     "@angular/common": "^22.2.5",
