@@ -16,6 +16,8 @@ import { extname, join, sep } from 'node:path'
 
 const IMPLS = [
   { name: 'svelte', dir: '../svelte', dist: '../svelte/dist' },
+  { name: 'react', dir: '../react', dist: '../react/dist' },
+  { name: 'solid', dir: '../solid', dist: '../solid/dist' },
   { name: 'preact', dir: '../preact', dist: '../preact/dist' },
   { name: 'vue', dir: '../vue', dist: '../vue/dist' },
   { name: 'lit', dir: '../lit', dist: '../lit/dist' },
