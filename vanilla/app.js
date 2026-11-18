@@ -10,6 +10,8 @@ const report = $('report')
 const demoBanner = $('demo-banner')
 const demoBadge = $('demo-badge')
 
+let hasResult = false
+
 $('search-form').addEventListener('submit', async (e) => {
   e.preventDefault()
   const term = query.value.trim()
@@ -35,9 +37,11 @@ $('search-form').addEventListener('submit', async (e) => {
     demoBanner.hidden = !weather.demo
     demoBadge.style.display = weather.demo ? '' : 'none'
     report.hidden = false
+    hasResult = true
   } catch (e) {
     error.textContent = e.message
     error.hidden = false
+    report.hidden = !hasResult
   } finally {
     btn.disabled = false
     btn.textContent = 'Search'
