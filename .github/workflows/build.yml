@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        impl: [svelte, preact, vue, lit, angular]
+        impl: [svelte, react, solid, preact, vue, lit, angular]
     steps:
       - uses: actions/checkout@v4
 
@@ -81,17 +81,24 @@ jobs:
           cache: npm
           cache-dependency-path: "**/package-lock.json"
 
-      # Same gitignored-file recreation as the impl jobs — site/build.mjs
-      # runs each impl's build and angular/alpine need these to succeed.
-      - name: Create env files from committed examples
+      # Secret files are gitignored, so the deploy recreates them with the real
+      # OWM key from the OWM_API_KEY repo secret. The key ships in public client
+      # JS by design. If the secret is unset the key is empty and every impl
+      # falls back to demo data.
+      - name: Write API key config
+        env:
+          OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
         run: |
-          cp angular/src/environments/environment.example.ts angular/src/environments/environment.ts
-          cp alpine/config.example.js alpine/config.js
-          cp vanilla/config.example.js vanilla/config.js
+          for d in svelte react solid preact vue lit; do
+            echo "VITE_OWM_API_KEY=$OWM_API_KEY" > "$d/.env"
+          done
+          printf "window.CONFIG = { API_KEY: '%s' }\n" "$OWM_API_KEY" > alpine/config.js
+          cp alpine/config.js vanilla/config.js
+          printf "export const environment = { owmApiKey: '%s' }\n" "$OWM_API_KEY" > angular/src/environments/environment.ts
 
       - name: Install impl dependencies
         run: |
-          for d in svelte preact vue lit angular; do
+          for d in svelte react solid preact vue lit angular; do
             npm --prefix "$d" ci
           done
 
@@ -105,7 +112,7 @@ jobs:
         working-directory: site
         run: |
           test -f dist/stats.json
-          for d in svelte preact vue lit alpine angular vanilla; do
+          for d in svelte react solid preact vue lit alpine angular vanilla; do
             test -f "dist/$d/index.html"
           done
           ! grep -r 'src="/assets/' dist/*/index.html
