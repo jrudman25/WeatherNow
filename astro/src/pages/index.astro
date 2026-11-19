@@ -44,6 +44,7 @@ import '../../../shared/app.css'
             <span id="city"></span>
             <span class="demo" id="demo-badge" style="display: none">demo data</span>
           </h2>
+          <p class="asof">As of <span id="local-time"></span></p>
           <p class="temp">
             <span id="temp"></span><span class="deg">&deg;F</span>
             <em id="temp-c"></em>
@@ -52,19 +53,27 @@ import '../../../shared/app.css'
 
           <dl>
             <div>
-              <dt>Clouds</dt>
-              <dd id="clouds"></dd>
+              <dt>Feels like</dt>
+              <dd id="feels-like"></dd>
+            </div>
+            <div>
+              <dt>Humidity</dt><dd id="humidity"></dd>
             </div>
             <div>
               <dt>Wind</dt>
               <dd id="wind"></dd>
             </div>
             <div>
-              <dt>Humidity</dt><dd id="humidity"></dd>
+              <dt>Clouds</dt>
+              <dd id="clouds"></dd>
             </div>
             <div>
-              <dt>As of</dt>
-              <dd id="local-time"></dd>
+              <dt>Visibility</dt>
+              <dd id="visibility"></dd>
+            </div>
+            <div>
+              <dt>Sunrise / Sunset</dt>
+              <dd id="sun-times"></dd>
             </div>
           </dl>
         </div>
@@ -74,7 +83,14 @@ import '../../../shared/app.css'
     <script>
       // Astro's idiom for client behavior without a framework island: a
       // processed <script> — bundled to a module and run on the page.
-      import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../../../shared/weather.js'
+      import {
+        themeFor,
+        toCelsius,
+        toLocalTime,
+        toSunTimes,
+        toVisibility,
+        fetchWeather,
+      } from '../../../shared/weather.js'
 
       const API_KEY = import.meta.env.PUBLIC_OWM_API_KEY
       const $ = (id) => document.getElementById(id)
@@ -106,11 +122,14 @@ import '../../../shared/app.css'
           $('temp').textContent = Math.round(weather.main.temp)
           $('temp-c').textContent = `/ ${toCelsius(weather)}°C`
           $('desc').textContent = weather.weather[0].description
-          $('clouds').textContent = `${weather.clouds.all}%`
+          $('local-time').textContent = toLocalTime(weather)
+          $('feels-like').textContent = `${Math.round(weather.main.feels_like)}°F`
+          $('humidity').textContent = `${weather.main.humidity}%`
           $('wind').textContent =
             `${Math.round(weather.wind.speed)} mph at ${Math.round(weather.wind.deg)}°`
-          $('humidity').textContent = `${weather.main.humidity}%`
-          $('local-time').textContent = toLocalTime(weather)
+          $('clouds').textContent = `${weather.clouds.all}%`
+          $('visibility').textContent = toVisibility(weather)
+          $('sun-times').textContent = toSunTimes(weather)
           demoBanner.hidden = !weather.demo
           demoBadge.style.display = weather.demo ? '' : 'none'
           report.hidden = false

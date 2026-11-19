@@ -5,6 +5,8 @@ import {
   themeFor,
   toCelsius,
   toLocalTime,
+  toSunTimes,
+  toVisibility,
   fetchWeather,
 } from '../../shared/weather.js';
 
@@ -71,6 +73,7 @@ export default function WeatherApp() {
               {weather.name}, {weather.sys.country}
               {weather.demo && <span className="demo">demo data</span>}
             </h2>
+            <p className="asof">As of {localTime}</p>
             <p className="temp">
               {Math.round(weather.main.temp)}
               <span className="deg">&deg;F</span>
@@ -80,8 +83,12 @@ export default function WeatherApp() {
 
             <dl>
               <div>
-                <dt>Clouds</dt>
-                <dd>{weather.clouds.all}%</dd>
+                <dt>Feels like</dt>
+                <dd>{Math.round(weather.main.feels_like)}&deg;F</dd>
+              </div>
+              <div>
+                <dt>Humidity</dt>
+                <dd>{weather.main.humidity}%</dd>
               </div>
               <div>
                 <dt>Wind</dt>
@@ -91,12 +98,16 @@ export default function WeatherApp() {
                 </dd>
               </div>
               <div>
-                <dt>Humidity</dt>
-                <dd>{weather.main.humidity}%</dd>
+                <dt>Clouds</dt>
+                <dd>{weather.clouds.all}%</dd>
               </div>
               <div>
-                <dt>As of</dt>
-                <dd>{localTime}</dd>
+                <dt>Visibility</dt>
+                <dd>{toVisibility(weather)}</dd>
+              </div>
+              <div>
+                <dt>Sunrise / Sunset</dt>
+                <dd>{toSunTimes(weather)}</dd>
               </div>
             </dl>
           </div>

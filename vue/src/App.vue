@@ -1,6 +1,13 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../../shared/weather.js'
+import {
+  themeFor,
+  toCelsius,
+  toLocalTime,
+  toSunTimes,
+  toVisibility,
+  fetchWeather,
+} from '../../shared/weather.js'
 
 const API_KEY = import.meta.env.VITE_OWM_API_KEY
 
@@ -12,6 +19,8 @@ const error = ref('')
 const theme = computed(() => themeFor(weather.value))
 const tempC = computed(() => (weather.value ? toCelsius(weather.value) : 0))
 const localTime = computed(() => (weather.value ? toLocalTime(weather.value) : ''))
+const sunTimes = computed(() => (weather.value ? toSunTimes(weather.value) : ''))
+const visibility = computed(() => (weather.value ? toVisibility(weather.value) : ''))
 
 async function search() {
   const term = query.value.trim()
@@ -62,6 +71,7 @@ async function search() {
           <h2>
             {{ weather.name }}, {{ weather.sys.country }}<span v-if="weather.demo" class="demo">demo data</span>
           </h2>
+          <p class="asof">As of {{ localTime }}</p>
           <p class="temp">
             {{ Math.round(weather.main.temp) }}<span class="deg">&deg;F</span>
             <em>/ {{ tempC }}&deg;C</em>
@@ -70,20 +80,28 @@ async function search() {
 
           <dl>
             <div>
-              <dt>Clouds</dt>
-              <dd>{{ weather.clouds.all }}%</dd>
-            </div>
-            <div>
-              <dt>Wind</dt>
-              <dd>{{ Math.round(weather.wind.speed) }} mph at {{ Math.round(weather.wind.deg) }}&deg;</dd>
+              <dt>Feels like</dt>
+              <dd>{{ Math.round(weather.main.feels_like) }}&deg;F</dd>
             </div>
             <div>
               <dt>Humidity</dt>
               <dd>{{ weather.main.humidity }}%</dd>
             </div>
             <div>
-              <dt>As of</dt>
-              <dd>{{ localTime }}</dd>
+              <dt>Wind</dt>
+              <dd>{{ Math.round(weather.wind.speed) }} mph at {{ Math.round(weather.wind.deg) }}&deg;</dd>
+            </div>
+            <div>
+              <dt>Clouds</dt>
+              <dd>{{ weather.clouds.all }}%</dd>
+            </div>
+            <div>
+              <dt>Visibility</dt>
+              <dd>{{ visibility }}</dd>
+            </div>
+            <div>
+              <dt>Sunrise / Sunset</dt>
+              <dd>{{ sunTimes }}</dd>
             </div>
           </dl>
         </div>

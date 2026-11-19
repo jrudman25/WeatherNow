@@ -13,6 +13,8 @@ component model, reactivity, and templating — the app logic lives here.
 | `themeFor(weather)` | Resolves the theme class for a weather payload (`'default'` when unset/unknown) |
 | `toCelsius(weather)` | Converts the imperial `main.temp` to a rounded Celsius integer |
 | `toLocalTime(weather)` | Formats `dt` + `timezone` as `HH:MM local` |
+| `toSunTimes(weather)` | Formats `sys.sunrise`/`sys.sunset` + `timezone` as `HH:MM / HH:MM` |
+| `toVisibility(weather)` | Formats `visibility` (meters) as miles (`n/a` when OWM omits it) |
 
 ## app.css
 

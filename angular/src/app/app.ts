@@ -1,12 +1,20 @@
 import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { environment } from '../environments/environment'
-import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../../../shared/weather.js'
+import {
+  themeFor,
+  toCelsius,
+  toLocalTime,
+  toSunTimes,
+  toVisibility,
+  fetchWeather,
+} from '../../../shared/weather.js'
 
 interface OwmWeather {
   name: string
-  sys: { country: string }
-  main: { temp: number; humidity: number }
+  sys: { country: string; sunrise: number; sunset: number }
+  main: { temp: number; feels_like: number; humidity: number }
+  visibility?: number
   weather: { main: string; description: string }[]
   wind: { speed: number; deg: number }
   clouds: { all: number }
@@ -37,6 +45,14 @@ export class App {
   protected readonly localTime = computed(() => {
     const w = this.weather()
     return w ? toLocalTime(w) : ''
+  })
+  protected readonly sunTimes = computed(() => {
+    const w = this.weather()
+    return w ? toSunTimes(w) : ''
+  })
+  protected readonly visibility = computed(() => {
+    const w = this.weather()
+    return w ? toVisibility(w) : ''
   })
 
   protected async search() {

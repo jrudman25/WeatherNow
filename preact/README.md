@@ -8,7 +8,7 @@ the sky outside.
 
 - City or ZIP search with live conditions
 - Animated gradient sky themes driven by current weather
-- Temperature (F/C), conditions, cloud cover, wind speed and direction, humidity
+- Temperature (F/C), conditions, feels like, humidity, wind speed and direction, cloud cover, visibility, sunrise/sunset, local time
 - Static site, builds to `dist/`
 
 ## Getting started

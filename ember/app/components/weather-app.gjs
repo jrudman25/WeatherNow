@@ -6,6 +6,8 @@ import {
   themeFor,
   toCelsius,
   toLocalTime,
+  toSunTimes,
+  toVisibility,
   fetchWeather,
 } from '../../../shared/weather.js';
 
@@ -31,6 +33,18 @@ export default class WeatherApp extends Component {
 
   get temp() {
     return this.weather ? Math.round(this.weather.main.temp) : 0;
+  }
+
+  get feelsLike() {
+    return this.weather ? Math.round(this.weather.main.feels_like) : 0;
+  }
+
+  get sunTimes() {
+    return this.weather ? toSunTimes(this.weather) : '';
+  }
+
+  get visibility() {
+    return this.weather ? toVisibility(this.weather) : '';
   }
 
   get wind() {
@@ -98,6 +112,7 @@ export default class WeatherApp extends Component {
                 {{this.weather.sys.country}}
                 {{#if this.weather.demo}}<span class="demo">demo data</span>{{/if}}
               </h2>
+              <p class="asof">As of {{this.localTime}}</p>
               <p class="temp">
                 {{this.temp}}
                 <span class="deg">&deg;F</span>
@@ -107,20 +122,28 @@ export default class WeatherApp extends Component {
 
               <dl>
                 <div>
-                  <dt>Clouds</dt>
-                  <dd>{{this.weather.clouds.all}}%</dd>
-                </div>
-                <div>
-                  <dt>Wind</dt>
-                  <dd>{{this.wind}}</dd>
+                  <dt>Feels like</dt>
+                  <dd>{{this.feelsLike}}&deg;F</dd>
                 </div>
                 <div>
                   <dt>Humidity</dt>
                   <dd>{{this.weather.main.humidity}}%</dd>
                 </div>
                 <div>
-                  <dt>As of</dt>
-                  <dd>{{this.localTime}}</dd>
+                  <dt>Wind</dt>
+                  <dd>{{this.wind}}</dd>
+                </div>
+                <div>
+                  <dt>Clouds</dt>
+                  <dd>{{this.weather.clouds.all}}%</dd>
+                </div>
+                <div>
+                  <dt>Visibility</dt>
+                  <dd>{{this.visibility}}</dd>
+                </div>
+                <div>
+                  <dt>Sunrise / Sunset</dt>
+                  <dd>{{this.sunTimes}}</dd>
                 </div>
               </dl>
             </div>

@@ -22,8 +22,20 @@ export function toCelsius(weather) {
   return Math.round(((weather.main.temp - 32) * 5) / 9)
 }
 
+function localClock(unixSeconds, timezone) {
+  return new Date((unixSeconds + timezone) * 1000).toUTCString().slice(17, 22)
+}
+
 export function toLocalTime(weather) {
-  return `${new Date((weather.dt + weather.timezone) * 1000).toUTCString().slice(17, 22)} local`
+  return `${localClock(weather.dt, weather.timezone)} local`
+}
+
+export function toSunTimes(weather) {
+  return `${localClock(weather.sys.sunrise, weather.timezone)} / ${localClock(weather.sys.sunset, weather.timezone)}`
+}
+
+export function toVisibility(weather) {
+  return weather.visibility == null ? 'n/a' : `${(weather.visibility / 1609.344).toFixed(1)} mi`
 }
 
 export async function fetchWeather(term, apiKey) {

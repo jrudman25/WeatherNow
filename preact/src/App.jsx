@@ -1,5 +1,12 @@
 import { useState } from 'preact/hooks'
-import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../../shared/weather.js'
+import {
+  themeFor,
+  toCelsius,
+  toLocalTime,
+  toSunTimes,
+  toVisibility,
+  fetchWeather,
+} from '../../shared/weather.js'
 
 const API_KEY = import.meta.env.VITE_OWM_API_KEY
 
@@ -62,6 +69,7 @@ export function App() {
               {weather.name}, {weather.sys.country}
               {weather.demo && <span class="demo">demo data</span>}
             </h2>
+            <p class="asof">As of {localTime}</p>
             <p class="temp">
               {Math.round(weather.main.temp)}
               <span class="deg">&deg;F</span>
@@ -71,8 +79,12 @@ export function App() {
 
             <dl>
               <div>
-                <dt>Clouds</dt>
-                <dd>{weather.clouds.all}%</dd>
+                <dt>Feels like</dt>
+                <dd>{Math.round(weather.main.feels_like)}&deg;F</dd>
+              </div>
+              <div>
+                <dt>Humidity</dt>
+                <dd>{weather.main.humidity}%</dd>
               </div>
               <div>
                 <dt>Wind</dt>
@@ -81,12 +93,16 @@ export function App() {
                 </dd>
               </div>
               <div>
-                <dt>Humidity</dt>
-                <dd>{weather.main.humidity}%</dd>
+                <dt>Clouds</dt>
+                <dd>{weather.clouds.all}%</dd>
               </div>
               <div>
-                <dt>As of</dt>
-                <dd>{localTime}</dd>
+                <dt>Visibility</dt>
+                <dd>{toVisibility(weather)}</dd>
+              </div>
+              <div>
+                <dt>Sunrise / Sunset</dt>
+                <dd>{toSunTimes(weather)}</dd>
               </div>
             </dl>
           </div>

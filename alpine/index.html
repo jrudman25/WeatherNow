@@ -56,6 +56,7 @@
               <span x-text="weather.name + ', ' + weather.sys.country"></span>
               <template x-if="weather.demo"><span class="demo">demo data</span></template>
             </h2>
+            <p class="asof" x-text="'As of ' + localTime"></p>
             <p class="temp">
               <span x-text="Math.round(weather.main.temp)"></span><span class="deg">&deg;F</span>
               <em x-text="'/ ' + tempC + '°C'"></em>
@@ -64,8 +65,12 @@
 
             <dl>
               <div>
-                <dt>Clouds</dt>
-                <dd x-text="weather.clouds.all + '%'"></dd>
+                <dt>Feels like</dt>
+                <dd x-text="Math.round(weather.main.feels_like) + '°F'"></dd>
+              </div>
+              <div>
+                <dt>Humidity</dt>
+                <dd x-text="weather.main.humidity + '%'"></dd>
               </div>
               <div>
                 <dt>Wind</dt>
@@ -74,12 +79,16 @@
                 ></dd>
               </div>
               <div>
-                <dt>Humidity</dt>
-                <dd x-text="weather.main.humidity + '%'"></dd>
+                <dt>Clouds</dt>
+                <dd x-text="weather.clouds.all + '%'"></dd>
               </div>
               <div>
-                <dt>As of</dt>
-                <dd x-text="localTime"></dd>
+                <dt>Visibility</dt>
+                <dd x-text="visibility"></dd>
+              </div>
+              <div>
+                <dt>Sunrise / Sunset</dt>
+                <dd x-text="sunTimes"></dd>
               </div>
             </dl>
           </div>

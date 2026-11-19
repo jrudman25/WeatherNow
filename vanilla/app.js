@@ -1,4 +1,11 @@
-import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../shared/weather.js'
+import {
+  themeFor,
+  toCelsius,
+  toLocalTime,
+  toSunTimes,
+  toVisibility,
+  fetchWeather,
+} from '../shared/weather.js'
 
 const $ = (id) => document.getElementById(id)
 
@@ -29,11 +36,14 @@ $('search-form').addEventListener('submit', async (e) => {
     $('temp').textContent = Math.round(weather.main.temp)
     $('temp-c').textContent = `/ ${toCelsius(weather)}°C`
     $('desc').textContent = weather.weather[0].description
-    $('clouds').textContent = `${weather.clouds.all}%`
+    $('local-time').textContent = toLocalTime(weather)
+    $('feels-like').textContent = `${Math.round(weather.main.feels_like)}°F`
+    $('humidity').textContent = `${weather.main.humidity}%`
     $('wind').textContent =
       `${Math.round(weather.wind.speed)} mph at ${Math.round(weather.wind.deg)}°`
-    $('humidity').textContent = `${weather.main.humidity}%`
-    $('local-time').textContent = toLocalTime(weather)
+    $('clouds').textContent = `${weather.clouds.all}%`
+    $('visibility').textContent = toVisibility(weather)
+    $('sun-times').textContent = toSunTimes(weather)
     demoBanner.hidden = !weather.demo
     demoBadge.style.display = weather.demo ? '' : 'none'
     report.hidden = false

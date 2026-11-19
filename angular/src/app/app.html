@@ -33,6 +33,7 @@
         <h2>
           {{ w.name }}, {{ w.sys.country }}@if (w.demo) {<span class="demo">demo data</span>}
         </h2>
+        <p class="asof">As of {{ localTime() }}</p>
         <p class="temp">
           {{ round(w.main.temp) }}<span class="deg">&deg;F</span>
           <em>/ {{ tempC() }}&deg;C</em>
@@ -41,20 +42,28 @@
 
         <dl>
           <div>
-            <dt>Clouds</dt>
-            <dd>{{ w.clouds.all }}%</dd>
-          </div>
-          <div>
-            <dt>Wind</dt>
-            <dd>{{ round(w.wind.speed) }} mph at {{ round(w.wind.deg) }}&deg;</dd>
+            <dt>Feels like</dt>
+            <dd>{{ round(w.main.feels_like) }}&deg;F</dd>
           </div>
           <div>
             <dt>Humidity</dt>
             <dd>{{ w.main.humidity }}%</dd>
           </div>
           <div>
-            <dt>As of</dt>
-            <dd>{{ localTime() }}</dd>
+            <dt>Wind</dt>
+            <dd>{{ round(w.wind.speed) }} mph at {{ round(w.wind.deg) }}&deg;</dd>
+          </div>
+          <div>
+            <dt>Clouds</dt>
+            <dd>{{ w.clouds.all }}%</dd>
+          </div>
+          <div>
+            <dt>Visibility</dt>
+            <dd>{{ visibility() }}</dd>
+          </div>
+          <div>
+            <dt>Sunrise / Sunset</dt>
+            <dd>{{ sunTimes() }}</dd>
           </div>
         </dl>
       </div>

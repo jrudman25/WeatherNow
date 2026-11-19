@@ -1,4 +1,11 @@
-import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../shared/weather.js'
+import {
+  themeFor,
+  toCelsius,
+  toLocalTime,
+  toSunTimes,
+  toVisibility,
+  fetchWeather,
+} from '../shared/weather.js'
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('weatherApp', () => ({
@@ -15,6 +22,12 @@ document.addEventListener('alpine:init', () => {
     },
     get localTime() {
       return this.weather ? toLocalTime(this.weather) : ''
+    },
+    get sunTimes() {
+      return this.weather ? toSunTimes(this.weather) : ''
+    },
+    get visibility() {
+      return this.weather ? toVisibility(this.weather) : ''
     },
 
     async search() {

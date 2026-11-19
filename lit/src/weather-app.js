@@ -1,5 +1,12 @@
 import { LitElement, html, nothing, unsafeCSS } from 'lit'
-import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../../shared/weather.js'
+import {
+  themeFor,
+  toCelsius,
+  toLocalTime,
+  toSunTimes,
+  toVisibility,
+  fetchWeather,
+} from '../../shared/weather.js'
 import sharedCss from '../../shared/app.css?inline'
 
 const API_KEY = import.meta.env.VITE_OWM_API_KEY
@@ -36,6 +43,12 @@ export class WeatherApp extends LitElement {
   }
   get localTime() {
     return this.weather ? toLocalTime(this.weather) : ''
+  }
+  get sunTimes() {
+    return this.weather ? toSunTimes(this.weather) : ''
+  }
+  get visibility() {
+    return this.weather ? toVisibility(this.weather) : ''
   }
 
   async search(e) {
@@ -88,6 +101,7 @@ export class WeatherApp extends LitElement {
                       ? html`<span class="demo">demo data</span>`
                       : nothing}
                   </h2>
+                  <p class="asof">As of ${this.localTime}</p>
                   <p class="temp">
                     ${Math.round(this.weather.main.temp)}<span class="deg">&deg;F</span>
                     <em>/ ${this.tempC}&deg;C</em>
@@ -96,8 +110,12 @@ export class WeatherApp extends LitElement {
 
                   <dl>
                     <div>
-                      <dt>Clouds</dt>
-                      <dd>${this.weather.clouds.all}%</dd>
+                      <dt>Feels like</dt>
+                      <dd>${Math.round(this.weather.main.feels_like)}&deg;F</dd>
+                    </div>
+                    <div>
+                      <dt>Humidity</dt>
+                      <dd>${this.weather.main.humidity}%</dd>
                     </div>
                     <div>
                       <dt>Wind</dt>
@@ -107,12 +125,16 @@ export class WeatherApp extends LitElement {
                       </dd>
                     </div>
                     <div>
-                      <dt>Humidity</dt>
-                      <dd>${this.weather.main.humidity}%</dd>
+                      <dt>Clouds</dt>
+                      <dd>${this.weather.clouds.all}%</dd>
                     </div>
                     <div>
-                      <dt>As of</dt>
-                      <dd>${this.localTime}</dd>
+                      <dt>Visibility</dt>
+                      <dd>${this.visibility}</dd>
+                    </div>
+                    <div>
+                      <dt>Sunrise / Sunset</dt>
+                      <dd>${this.sunTimes}</dd>
                     </div>
                   </dl>
                 </div>

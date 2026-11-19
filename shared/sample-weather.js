@@ -10,7 +10,7 @@ export default {
   wind: { speed: 8.2, deg: 270 },
   clouds: { all: 5 },
   dt: 1763232000,
-  sys: { country: 'US', sunrise: 1763206000, sunset: 1763243000 },
+  sys: { country: 'US', sunrise: 1763218200, sunset: 1763254620 },
   timezone: -28800,
   id: 5391959,
   name: 'San Francisco',

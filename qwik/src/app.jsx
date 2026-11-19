@@ -1,5 +1,12 @@
 import { component$, useSignal, $ } from '@builder.io/qwik'
-import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../../shared/weather.js'
+import {
+  themeFor,
+  toCelsius,
+  toLocalTime,
+  toSunTimes,
+  toVisibility,
+  fetchWeather,
+} from '../../shared/weather.js'
 
 const API_KEY = import.meta.env.VITE_OWM_API_KEY
 
@@ -60,6 +67,7 @@ export const App = component$(() => {
               {weather.value.name}, {weather.value.sys.country}
               {weather.value.demo && <span class="demo">demo data</span>}
             </h2>
+            <p class="asof">As of {localTime}</p>
             <p class="temp">
               {Math.round(weather.value.main.temp)}
               <span class="deg">&deg;F</span>
@@ -69,8 +77,12 @@ export const App = component$(() => {
 
             <dl>
               <div>
-                <dt>Clouds</dt>
-                <dd>{weather.value.clouds.all}%</dd>
+                <dt>Feels like</dt>
+                <dd>{Math.round(weather.value.main.feels_like)}&deg;F</dd>
+              </div>
+              <div>
+                <dt>Humidity</dt>
+                <dd>{weather.value.main.humidity}%</dd>
               </div>
               <div>
                 <dt>Wind</dt>
@@ -80,12 +92,16 @@ export const App = component$(() => {
                 </dd>
               </div>
               <div>
-                <dt>Humidity</dt>
-                <dd>{weather.value.main.humidity}%</dd>
+                <dt>Clouds</dt>
+                <dd>{weather.value.clouds.all}%</dd>
               </div>
               <div>
-                <dt>As of</dt>
-                <dd>{localTime}</dd>
+                <dt>Visibility</dt>
+                <dd>{toVisibility(weather.value)}</dd>
+              </div>
+              <div>
+                <dt>Sunrise / Sunset</dt>
+                <dd>{toSunTimes(weather.value)}</dd>
               </div>
             </dl>
           </div>

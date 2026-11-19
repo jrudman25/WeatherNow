@@ -1,6 +1,13 @@
 <script>
   import { fade, fly } from 'svelte/transition'
-  import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../../shared/weather.js'
+  import {
+    themeFor,
+    toCelsius,
+    toLocalTime,
+    toSunTimes,
+    toVisibility,
+    fetchWeather,
+  } from '../../shared/weather.js'
 
   const API_KEY = import.meta.env.VITE_OWM_API_KEY
 
@@ -12,6 +19,8 @@
   let theme = $derived(themeFor(weather))
   let tempC = $derived(weather ? toCelsius(weather) : 0)
   let localTime = $derived(weather ? toLocalTime(weather) : '')
+  let sunTimes = $derived(weather ? toSunTimes(weather) : '')
+  let visibility = $derived(weather ? toVisibility(weather) : '')
 
   async function search() {
     const term = query.trim()
@@ -62,6 +71,7 @@
     {#if weather && !loading}
       <div class="report" in:fly={{ y: 24, duration: 600 }}>
         <h2>{weather.name}, {weather.sys.country}{#if weather.demo}<span class="demo">demo data</span>{/if}</h2>
+        <p class="asof">As of {localTime}</p>
         <p class="temp">
           {Math.round(weather.main.temp)}<span class="deg">&deg;F</span>
           <em>/ {tempC}&deg;C</em>
@@ -69,13 +79,15 @@
         <p class="desc">{weather.weather[0].description}</p>
 
         <dl>
-          <div><dt>Clouds</dt><dd>{weather.clouds.all}%</dd></div>
+          <div><dt>Feels like</dt><dd>{Math.round(weather.main.feels_like)}&deg;F</dd></div>
+          <div><dt>Humidity</dt><dd>{weather.main.humidity}%</dd></div>
           <div>
             <dt>Wind</dt>
             <dd>{Math.round(weather.wind.speed)} mph at {Math.round(weather.wind.deg)}&deg;</dd>
           </div>
-          <div><dt>Humidity</dt><dd>{weather.main.humidity}%</dd></div>
-          <div><dt>As of</dt><dd>{localTime}</dd></div>
+          <div><dt>Clouds</dt><dd>{weather.clouds.all}%</dd></div>
+          <div><dt>Visibility</dt><dd>{visibility}</dd></div>
+          <div><dt>Sunrise / Sunset</dt><dd>{sunTimes}</dd></div>
         </dl>
       </div>
     {/if}
