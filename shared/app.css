@@ -184,6 +184,8 @@ button:disabled {
 .temp em {
   font-size: 0.25em;
   font-style: normal;
+  /* compensates for the full-size markup space before the em */
+  margin-left: -0.75em;
   opacity: 0.7;
   vertical-align: super;
 }
