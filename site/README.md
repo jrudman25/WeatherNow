@@ -21,8 +21,10 @@ dependencies must be installed first (`npm install` per impl, once).
 `npm run measure` needs `npm install` in `site/` and a local Google Chrome
 install. It loads each staged impl 5 times cold, throttled to Lighthouse's
 mobile profile (Slow 4G, 4x CPU slowdown), and writes the medians to
-`perf.json`. Commit `perf.json`: builds, including CI deploys, copy it into
-`stats.json`, so load times only change when someone re-measures.
+`perf.json`. Numbers are a single-machine snapshot: exact values drift
+between machines and runs, but the impl ordering is consistent. Commit
+`perf.json`: builds, including CI deploys, copy it into `stats.json`, so
+load times only change when someone re-measures.
 
 ## Deploy
 

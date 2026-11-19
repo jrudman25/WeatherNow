@@ -17,7 +17,9 @@
   (long-task time after FCP beyond 50 ms, until load + FCP + network idle +
   2 s). Waits for `readyState === 'complete'` and FCP explicitly: under CPU
   throttling `goto` can resolve first (ember). Fails on any page error or
-  missing metric rather than recording a partial result
+  missing metric rather than recording a partial result. Numbers are a
+  single-machine snapshot: exact values drift between machines and runs,
+  but the impl ordering is consistent
 - LOC counting: `SOURCE_EXT` must include each impl's component extension
   (`.svelte`, `.vue`, `.gjs`, `.astro`, ...) and `SKIP_DIRS` must cover
   generated/cache dirs (`tmp` for ember, `.astro`, `.next`, `out`), or the
