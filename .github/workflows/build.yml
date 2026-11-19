@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        impl: [svelte, react, solid, preact, vue, lit, angular]
+        impl: [svelte, react, solid, preact, vue, lit, angular, qwik, astro, ember, nextjs]
     steps:
       - uses: actions/checkout@v4
 
@@ -89,16 +89,18 @@ jobs:
         env:
           OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
         run: |
-          for d in svelte react solid preact vue lit; do
+          for d in svelte react solid preact vue lit qwik ember; do
             echo "VITE_OWM_API_KEY=$OWM_API_KEY" > "$d/.env"
           done
+          echo "PUBLIC_OWM_API_KEY=$OWM_API_KEY" > astro/.env
+          echo "NEXT_PUBLIC_OWM_API_KEY=$OWM_API_KEY" > nextjs/.env
           printf "window.CONFIG = { API_KEY: '%s' }\n" "$OWM_API_KEY" > alpine/config.js
           cp alpine/config.js vanilla/config.js
           printf "export const environment = { owmApiKey: '%s' }\n" "$OWM_API_KEY" > angular/src/environments/environment.ts
 
       - name: Install impl dependencies
         run: |
-          for d in svelte react solid preact vue lit angular; do
+          for d in svelte react solid preact vue lit angular qwik astro ember nextjs; do
             npm --prefix "$d" ci
           done
 
@@ -112,7 +114,7 @@ jobs:
         working-directory: site
         run: |
           test -f dist/stats.json
-          for d in svelte react solid preact vue lit alpine angular vanilla; do
+          for d in svelte react solid preact vue lit alpine angular vanilla qwik astro ember nextjs; do
             test -f "dist/$d/index.html"
           done
           ! grep -r 'src="/assets/' dist/*/index.html
