@@ -13,9 +13,15 @@
   (`playwright-core`, `channel: 'chrome'` = installed Chrome, no browser
   download). Serves `dist/` on :5181, 5 cold loads per impl (fresh context
   each, impls interleaved per round), Lighthouse mobile throttling (562.5 ms
-  RTT, 1474.56/675 kbps, 4x CPU) at 412x823, medians of FCP, LCP, and TBT
+  RTT, 1474.56/675 kbps, 4x CPU) at 412x823. Metrics: FCP, LCP, TBT
   (long-task time after FCP beyond 50 ms, until load + FCP + network idle +
-  2 s). Waits for `readyState === 'complete'` and FCP explicitly: under CPU
+  2 s), `busy` (the same measure over the whole load — surfaces boot cost
+  that hides inside FCP), and `render` (search submit to `.report` painted,
+  with api.openweathermap.org stubbed to `shared/sample-weather.js`; the
+  capture-phase submit listener and MutationObserver handle `hidden`,
+  `display:none`, conditional mounts, and lit's shadow DOM). The table
+  shows FCP/Busy/Render; LCP and TBT stay recorded in `perf.json` only.
+  Waits for `readyState === 'complete'` and FCP explicitly: under CPU
   throttling `goto` can resolve first (ember). Fails on any page error or
   missing metric rather than recording a partial result. Numbers are a
   single-machine snapshot: exact values drift between machines and runs,
@@ -70,7 +76,7 @@
   (alpine, vanilla) also count the `shared/` files they load at runtime.
   Column definitions live in each `<th title>` in `index.html`
 - stats.json is generated data — the landing page fetches it at runtime.
-  Its `perf` block is `perf.json` verbatim (`null` if absent); FCP/LCP/TBT
+  Its `perf` block is `perf.json` verbatim (`null` if absent); the timing
   cells render `n/a` for impls missing from it, so re-measure after adding
   an impl. `perf.json` is committed source data, not build output
 - `buildMs` is `null` when staged via `--skip-builds`; the table renders `n/a`

@@ -1,5 +1,5 @@
 {
-  "measured": "2026-11-19T20:51:28.248Z",
+  "measured": "2026-11-19T21:41:18.820Z",
   "chrome": "157.0.8103.79",
   "runs": 5,
   "profile": {
@@ -14,69 +14,95 @@
   },
   "results": {
     "svelte": {
-      "fcp": 2020,
-      "lcp": 2020,
-      "tbt": 47
+      "fcp": 2324,
+      "lcp": 2324,
+      "tbt": 0,
+      "busy": 681,
+      "render": 1038
     },
     "react": {
-      "fcp": 3144,
-      "lcp": 3144,
-      "tbt": 0
+      "fcp": 4264,
+      "lcp": 4264,
+      "tbt": 0,
+      "busy": 534,
+      "render": 1036
     },
     "solid": {
-      "fcp": 1824,
-      "lcp": 1824,
-      "tbt": 14
+      "fcp": 1692,
+      "lcp": 1692,
+      "tbt": 0,
+      "busy": 210,
+      "render": 629
     },
     "preact": {
-      "fcp": 1848,
-      "lcp": 1848,
-      "tbt": 0
+      "fcp": 1716,
+      "lcp": 1716,
+      "tbt": 0,
+      "busy": 220,
+      "render": 692
     },
     "vue": {
-      "fcp": 2048,
-      "lcp": 2048,
-      "tbt": 29
+      "fcp": 2292,
+      "lcp": 2292,
+      "tbt": 0,
+      "busy": 427,
+      "render": 882
     },
     "lit": {
-      "fcp": 1836,
-      "lcp": 1836,
-      "tbt": 0
+      "fcp": 1620,
+      "lcp": 1620,
+      "tbt": 0,
+      "busy": 104,
+      "render": 897
     },
     "qwik": {
-      "fcp": 4696,
-      "lcp": 4696,
-      "tbt": 0
+      "fcp": 5692,
+      "lcp": 5692,
+      "tbt": 0,
+      "busy": 1271,
+      "render": 1432
     },
     "astro": {
-      "fcp": 992,
-      "lcp": 992,
-      "tbt": 13
+      "fcp": 852,
+      "lcp": 852,
+      "tbt": 0,
+      "busy": 0,
+      "render": 677
     },
     "ember": {
-      "fcp": 4004,
-      "lcp": 4004,
-      "tbt": 0
+      "fcp": 6212,
+      "lcp": 6212,
+      "tbt": 0,
+      "busy": 3034,
+      "render": 993
     },
     "nextjs": {
-      "fcp": 1768,
-      "lcp": 1768,
-      "tbt": 757
+      "fcp": 1580,
+      "lcp": 1580,
+      "tbt": 2484,
+      "busy": 2484,
+      "render": 1016
     },
     "alpine": {
-      "fcp": 1840,
-      "lcp": 1840,
-      "tbt": 139
+      "fcp": 1708,
+      "lcp": 1708,
+      "tbt": 415,
+      "busy": 415,
+      "render": 1371
     },
     "vanilla": {
-      "fcp": 1796,
-      "lcp": 1796,
-      "tbt": 11
+      "fcp": 1620,
+      "lcp": 1620,
+      "tbt": 20,
+      "busy": 20,
+      "render": 922
     },
     "angular": {
-      "fcp": 2844,
-      "lcp": 2844,
-      "tbt": 0
+      "fcp": 3296,
+      "lcp": 3296,
+      "tbt": 0,
+      "busy": 889,
+      "render": 1272
     }
   }
 }

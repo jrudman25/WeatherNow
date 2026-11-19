@@ -37,7 +37,7 @@ the current weather.
 - `site/` — the aggregate comparison site and the repo's single deployable
   artifact: a vanilla HTML/JS landing page linking every implementation with
   live stats (bundle size, lines of code, dependencies, build time, and
-  throttled load times: FCP, LCP, TBT)
+  throttled timings: FCP, main-thread busy, search render)
 
 ## Running an implementation
 

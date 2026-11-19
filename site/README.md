@@ -3,8 +3,8 @@
 The aggregate comparison site — the repo's single deployable artifact. A
 vanilla HTML/JS landing page links every implementation and shows live
 comparison stats: bundle size, LOC, dependency count, and build time
-generated at build time, plus throttled load times (FCP, LCP, TBT) from
-`npm run measure`.
+generated at build time, plus throttled timings (FCP, main-thread busy,
+search render) from `npm run measure`.
 
 ## Build and preview
 
@@ -21,7 +21,9 @@ dependencies must be installed first (`npm install` per impl, once).
 `npm run measure` needs `npm install` in `site/` and a local Google Chrome
 install. It loads each staged impl 5 times cold, throttled to Lighthouse's
 mobile profile (Slow 4G, 4x CPU slowdown), and writes the medians to
-`perf.json`. Numbers are a single-machine snapshot: exact values drift
+`perf.json`: FCP, main-thread busy, and render (search submit to report
+paint, with the weather API stubbed so keyed and keyless builds measure the
+same). Numbers are a single-machine snapshot: exact values drift
 between machines and runs, but the impl ordering is consistent. Commit
 `perf.json`: builds, including CI deploys, copy it into `stats.json`, so
 load times only change when someone re-measures.

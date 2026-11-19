@@ -30,8 +30,8 @@
             <th class="num" data-key="deps" title="Direct dependencies plus devDependencies in package.json." data-label="Dependencies"><button type="button">Dependencies</button></th>
             <th class="num" data-key="buildMs" title="Wall time of npm run build during the last site build." data-label="Build"><button type="button">Build</button></th>
             <th class="num" data-key="fcp" title="First Contentful Paint: time until the first text or image renders. Methodology in the footer." data-label="FCP"><button type="button">FCP</button></th>
-            <th class="num" data-key="lcp" title="Largest Contentful Paint: time until the largest visible element renders. Methodology in the footer." data-label="LCP"><button type="button">LCP</button></th>
-            <th class="num" data-key="tbt" title="Total Blocking Time: main-thread time after FCP spent in tasks over 50 ms, which delays input. Methodology in the footer." data-label="TBT"><button type="button">TBT</button></th>
+            <th class="num" data-key="busy" title="Main-thread time blocked by tasks over 50 ms across the whole load. Methodology in the footer." data-label="Busy"><button type="button">Busy</button></th>
+            <th class="num" data-key="render" title="Time from submitting a search to the weather report painting, with the weather API stubbed. Methodology in the footer." data-label="Render"><button type="button">Render</button></th>
           </tr>
         </thead>
         <tbody id="rows">
@@ -76,8 +76,8 @@
         deps: (r) => r.deps,
         buildMs: (r) => (r.buildMs === null ? 'n/a' : (r.buildMs / 1000).toFixed(1) + 's'),
         fcp: (r) => MS(r.fcp),
-        lcp: (r) => MS(r.lcp),
-        tbt: (r) => MS(r.tbt),
+        busy: (r) => MS(r.busy),
+        render: (r) => MS(r.render),
       }
 
       function render() {
@@ -97,8 +97,8 @@
             <td class="num">${fmt.deps(r)}</td>
             <td class="num">${fmt.buildMs(r)}</td>
             <td class="num">${fmt.fcp(r)}</td>
-            <td class="num">${fmt.lcp(r)}</td>
-            <td class="num">${fmt.tbt(r)}</td>
+            <td class="num">${fmt.busy(r)}</td>
+            <td class="num">${fmt.render(r)}</td>
           </tr>`
           )
           .join('')
@@ -122,9 +122,9 @@
       )
       if (perf)
         document.getElementById('measured').textContent =
-          '; load times are medians of ' +
+          '; timings are medians of ' +
           (perf.runs ?? 5) +
-          ' cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport, measured ' +
+          ' cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport with the weather API stubbed, measured ' +
           perf.measured.slice(0, 10) +
           ' on a single machine. Exact values drift between machines and runs; the ordering is consistent'
       render()

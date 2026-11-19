@@ -1,5 +1,6 @@
-// Measures cold-load FCP, LCP, and TBT for every impl staged in dist/ under
-// throttled conditions, using the locally installed Chrome (no browser
+// Measures cold-load FCP, LCP, TBT, main-thread busy time, and submit-to-
+// report render time for every impl staged in dist/ under throttled
+// conditions, using the locally installed Chrome (no browser
 // download). Writes perf.json, which is committed: build.mjs merges it into
 // dist/stats.json so CI deploys keep the last measured numbers without a
 // browser. Run after `npm run build` or `npm run stage`; also patches the
@@ -7,6 +8,7 @@
 import { spawn } from 'node:child_process'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { chromium } from 'playwright-core'
+import sampleWeather from '../shared/sample-weather.js'
 
 const RUNS = 5
 const PORT = 5181
@@ -41,19 +43,69 @@ function observe() {
   }).observe({ type: 'longtask', buffered: true })
 }
 
-// TBT as Lighthouse defines it: per long task, the part after FCP beyond 50 ms
+// TBT as Lighthouse defines it: per long task, the part after FCP beyond
+// 50 ms. `busy` is the same measure without the FCP clamp: blocking over the
+// whole load, which surfaces boot cost that FCP hides.
 function collect() {
   const fcp = performance.getEntriesByName('first-contentful-paint')[0]?.startTime ?? null
   const { lcp, longTasks } = window.__perf
   let tbt = null
+  let busy = null
   if (fcp !== null) {
     tbt = 0
+    busy = 0
     for (const [start, duration] of longTasks) {
+      if (duration > 50) busy += duration - 50
       const afterFcp = start + duration - Math.max(start, fcp)
       if (afterFcp > 50) tbt += afterFcp - 50
     }
   }
-  return { fcp, lcp, tbt }
+  return { fcp, lcp, tbt, busy }
+}
+
+// Drives a real search and times submit -> report visible -> painted. The
+// capture-phase listener sets t0 before framework handlers run; the observer
+// resolves on the mutation that reveals .report (covers the hidden attr,
+// display:none, conditional mounts, and lit's shadow DOM), plus one painted
+// frame. Resolves null on timeout so the missing-metric check reports it.
+async function measureRender(page) {
+  await page.evaluate(() => {
+    window.__renderMs = Promise.race([
+      new Promise((resolve) => {
+        const arm = () => {
+          const t0 = performance.now()
+          const deepFind = (root) => {
+            let el = root.querySelector('.report')
+            if (el) return el
+            for (const n of root.querySelectorAll('*'))
+              if (n.shadowRoot && (el = deepFind(n.shadowRoot))) return el
+            return null
+          }
+          const check = () => {
+            const r = deepFind(document)
+            if (r && r.getClientRects().length > 0) {
+              obs.disconnect()
+              requestAnimationFrame(() => requestAnimationFrame(() => resolve(performance.now() - t0)))
+            }
+          }
+          const obs = new MutationObserver(check)
+          const watch = (root) => {
+            obs.observe(root, { childList: true, subtree: true, attributes: true })
+            for (const n of root.querySelectorAll('*')) if (n.shadowRoot) watch(n.shadowRoot)
+          }
+          watch(document)
+          check()
+        }
+        document.addEventListener('submit', arm, { capture: true, once: true })
+        for (const n of document.querySelectorAll('*'))
+          if (n.shadowRoot) n.shadowRoot.addEventListener('submit', arm, { capture: true, once: true })
+      }),
+      new Promise((resolve) => setTimeout(() => resolve(null), 15000)),
+    ])
+  })
+  await page.fill('input[placeholder="city or zip"]', 'London')
+  await page.click('button[type="submit"]')
+  return page.evaluate(() => window.__renderMs)
 }
 
 async function measureOnce(browser, name) {
@@ -62,6 +114,8 @@ async function measureOnce(browser, name) {
   const page = await context.newPage()
   const errors = []
   page.on('pageerror', (e) => errors.push(e.message))
+  // Stub the weather API so keyed and keyless builds take the same path
+  await page.route('**://api.openweathermap.org/**', (route) => route.fulfill({ json: sampleWeather }))
   const cdp = await context.newCDPSession(page)
   await cdp.send('Network.enable')
   await cdp.send('Network.emulateNetworkConditions', {
@@ -83,6 +137,7 @@ async function measureOnce(browser, name) {
   await page.waitForLoadState('networkidle')
   await page.waitForTimeout(SETTLE_MS)
   const result = await page.evaluate(collect)
+  result.render = await measureRender(page)
   await context.close()
   if (errors.length) throw new Error(`${name}: page errors: ${errors.join('; ')}`)
   for (const [k, v] of Object.entries(result)) if (v === null) throw new Error(`${name}: no ${k} recorded`)
@@ -107,7 +162,9 @@ try {
 
   const results = {}
   for (const [name, runs] of Object.entries(samples)) {
-    results[name] = Object.fromEntries(['fcp', 'lcp', 'tbt'].map((k) => [k, median(runs.map((r) => r[k]))]))
+    results[name] = Object.fromEntries(
+      ['fcp', 'lcp', 'tbt', 'busy', 'render'].map((k) => [k, median(runs.map((r) => r[k]))])
+    )
   }
   const perf = {
     measured: new Date().toISOString(),
