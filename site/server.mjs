@@ -12,6 +12,8 @@ const TYPES = {
   '.json': 'application/json',
   '.ico': 'image/x-icon',
   '.map': 'application/json',
+  '.svg': 'image/svg+xml',
+  '.txt': 'text/plain',
 }
 
 createServer(async (req, res) => {
@@ -23,7 +25,15 @@ createServer(async (req, res) => {
 
   let file = join('dist', path)
   try {
-    if ((await stat(file)).isDirectory()) file = join(file, 'index.html')
+    if ((await stat(file)).isDirectory()) {
+      // Mirror Firebase Hosting: /svelte -> /svelte/ so relative asset URLs
+      // resolve under the impl's subpath instead of the site root
+      if (!path.endsWith('/')) {
+        res.writeHead(301, { Location: path + '/' })
+        return res.end()
+      }
+      file = join(file, 'index.html')
+    }
     res.writeHead(200, { 'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream' })
     createReadStream(file).pipe(res)
   } catch {

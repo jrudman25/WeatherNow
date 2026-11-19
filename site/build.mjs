@@ -12,7 +12,7 @@ import {
   writeFileSync,
 } from 'node:fs'
 import { gzipSync } from 'node:zlib'
-import { extname, join, sep } from 'node:path'
+import { extname, join } from 'node:path'
 
 const IMPLS = [
   { name: 'svelte', dir: '../svelte', dist: '../svelte/dist' },
@@ -21,6 +21,10 @@ const IMPLS = [
   { name: 'preact', dir: '../preact', dist: '../preact/dist' },
   { name: 'vue', dir: '../vue', dist: '../vue/dist' },
   { name: 'lit', dir: '../lit', dist: '../lit/dist' },
+  { name: 'qwik', dir: '../qwik', dist: '../qwik/dist' },
+  { name: 'astro', dir: '../astro', dist: '../astro/dist' },
+  { name: 'ember', dir: '../ember', dist: '../ember/dist' },
+  { name: 'nextjs', dir: '../nextjs', dist: '../nextjs/out' },
   // alpine + vanilla stage their own dist as { <name>/, shared/ }; merge both halves
   { name: 'alpine', dir: '../alpine', dist: '../alpine/dist/alpine', shared: '../alpine/dist/shared' },
   { name: 'vanilla', dir: '../vanilla', dist: '../vanilla/dist/vanilla', shared: '../vanilla/dist/shared' },
@@ -28,16 +32,19 @@ const IMPLS = [
   { name: 'angular', dir: '../angular', dist: '../angular/dist/browser' },
 ]
 
-const SOURCE_EXT = new Set(['.js', '.jsx', '.ts', '.svelte', '.vue', '.html', '.css', '.mjs'])
-const SKIP_DIRS = new Set(['node_modules', 'dist', '.angular', 'vendor', 'public', 'environments', 'out-tsc'])
+const SOURCE_EXT = new Set(['.js', '.jsx', '.ts', '.svelte', '.vue', '.gjs', '.astro', '.html', '.css', '.mjs'])
+const SKIP_DIRS = new Set(['node_modules', 'dist', '.angular', '.astro', '.next', 'out', 'tmp', 'vendor', 'public', 'environments', 'out-tsc'])
 
 const skipBuilds = process.argv.includes('--skip-builds')
 
-function* walk(dir) {
+// `skip` prunes directories by name before descending (LOC only; staged dist
+// dirs may legitimately contain e.g. alpine's vendor/)
+function* walk(dir, skip = new Set()) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, e.name)
-    if (e.isDirectory()) yield* walk(p)
-    else yield p
+    if (e.isDirectory()) {
+      if (!skip.has(e.name)) yield* walk(p, skip)
+    } else yield p
   }
 }
 
@@ -48,8 +55,22 @@ function bundleStats(dir) {
     cssGzip = 0
   for (const f of walk(dir)) {
     const ext = extname(f)
-    if (ext !== '.js' && ext !== '.css') continue
     const buf = readFileSync(f)
+    if (ext === '.html') {
+      // Inline <script>/<style> payloads are shipped JS/CSS too (astro
+      // inlines its whole bundle; other impls emit external files only)
+      const html = buf.toString('utf8')
+      for (const m of html.matchAll(/<script(?![^>]*\ssrc)[^>]*>([\s\S]*?)<\/script>/g)) {
+        jsBytes += m[1].length
+        jsGzip += gzipSync(m[1]).length
+      }
+      for (const m of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {
+        cssBytes += m[1].length
+        cssGzip += gzipSync(m[1]).length
+      }
+      continue
+    }
+    if (ext !== '.js' && ext !== '.css') continue
     const gz = gzipSync(buf).length
     if (ext === '.js') {
       jsBytes += buf.length
@@ -64,8 +85,7 @@ function bundleStats(dir) {
 
 function countLoc(dir) {
   let n = 0
-  for (const f of walk(dir)) {
-    if ([...SKIP_DIRS].some((d) => f.split(sep).includes(d))) continue
+  for (const f of walk(dir, SKIP_DIRS)) {
     if (!SOURCE_EXT.has(extname(f))) continue
     n += readFileSync(f, 'utf8').split('\n').length
   }
@@ -89,8 +109,13 @@ for (const impl of IMPLS) {
   cpSync(impl.dist, join('dist', impl.name), { recursive: true })
   if (impl.shared) cpSync(impl.shared, 'dist/shared', { recursive: true })
 
+  const bundle = bundleStats(join('dist', impl.name))
+  // alpine/vanilla load ../shared/ at runtime instead of bundling it, so its
+  // JS/CSS counts toward their size the same way it does for bundled impls
+  if (impl.shared) for (const [k, v] of Object.entries(bundleStats(impl.shared))) bundle[k] += v
+
   implementations[impl.name] = {
-    ...bundleStats(join('dist', impl.name)),
+    ...bundle,
     loc: countLoc(impl.dir),
     deps: depCount(impl.dir),
     buildMs,

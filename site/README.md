@@ -28,7 +28,11 @@ Firebase project; the site is live at https://weathernow-fab1e.web.app.
 ## Notes
 
 - Implementations are served at `/<name>/` subpaths — Vite impls build with
-  `base: './'`, Angular with `baseHref: './'`, and Alpine's `<base href="/alpine/">`
-  + Vanilla's `<base href="/vanilla/">` already match their subpaths.
+  `base: './'`, Angular with `baseHref: './'`; Alpine's `<base href="/alpine/">`,
+  Vanilla's `<base href="/vanilla/">`, Astro's `base: '/astro'`, and Next.js's
+  `basePath: '/nextjs'` already match their subpaths.
+- Next.js exports to `nextjs/out/` rather than `dist/`.
+- `npm run preview` redirects `/<name>` to `/<name>/` like Firebase Hosting
+  does, so relative asset URLs resolve under the impl's subpath.
 - Alpine and Vanilla additionally merge their `dist/shared/` staging into
   `site/dist/shared/`.

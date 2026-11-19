@@ -23,12 +23,12 @@
       <table class="stats">
         <thead>
           <tr>
-            <th data-key="name" data-label="Implementation">Implementation</th>
-            <th class="num" data-key="jsGzip" data-label="JS (gzip)">JS (gzip)</th>
-            <th class="num" data-key="cssGzip" data-label="CSS (gzip)">CSS (gzip)</th>
-            <th class="num" data-key="loc" data-label="Lines of code">Lines of code</th>
-            <th class="num" data-key="deps" data-label="Dependencies">Dependencies</th>
-            <th class="num" data-key="buildMs" data-label="Build">Build</th>
+            <th data-key="name" title="Framework folder in the repo. Click a name to open that app." data-label="Implementation">Implementation</th>
+            <th class="num" data-key="jsGzip" title="All JavaScript the build emits (files plus inline scripts), gzipped. Code-split chunks count even if they load later." data-label="JS (gzip)">JS (gzip)</th>
+            <th class="num" data-key="cssGzip" title="All CSS the build emits (files plus inline styles), gzipped." data-label="CSS (gzip)">CSS (gzip)</th>
+            <th class="num" data-key="loc" title="Source lines in the implementation folder, including config. Excludes dependencies and build output." data-label="Lines of code">Lines of code</th>
+            <th class="num" data-key="deps" title="Direct dependencies plus devDependencies in package.json." data-label="Dependencies">Dependencies</th>
+            <th class="num" data-key="buildMs" title="Wall time of npm run build during the last site build." data-label="Build">Build</th>
           </tr>
         </thead>
         <tbody id="rows">
