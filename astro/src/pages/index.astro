@@ -1,0 +1,129 @@
+---
+import '../../../shared/app.css'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d12" />
+    <meta
+      name="description"
+      content="WeatherNow: a modern weather experience. Live conditions from OpenWeatherMap."
+    />
+    <link rel="icon" href="favicon.ico" />
+    <title>WeatherNow · Astro</title>
+  </head>
+  <body>
+    <main class="scene" id="scene">
+      <div class="sky" aria-hidden="true"></div>
+
+      <section class="panel">
+        <a class="back" href="/">Back to comparisons</a>
+        <h1 class="wordmark">WeatherNow</h1>
+
+        <form id="search-form">
+          <input
+            id="query"
+            placeholder="city or zip"
+            aria-label="City or zip code"
+            autocomplete="off"
+          />
+          <button id="search-btn" type="submit">Search</button>
+        </form>
+
+        <p class="demo-banner" id="demo-banner" hidden>
+          Sample data: add an API key for live results.
+        </p>
+
+        <p class="error" id="error" hidden></p>
+
+        <div class="report" id="report" hidden>
+          <h2>
+            <span id="city"></span>
+            <span class="demo" id="demo-badge" style="display: none">demo data</span>
+          </h2>
+          <p class="temp">
+            <span id="temp"></span><span class="deg">&deg;F</span>
+            <em id="temp-c"></em>
+          </p>
+          <p class="desc" id="desc"></p>
+
+          <dl>
+            <div>
+              <dt>Clouds</dt>
+              <dd id="clouds"></dd>
+            </div>
+            <div>
+              <dt>Wind</dt>
+              <dd id="wind"></dd>
+            </div>
+            <div>
+              <dt>Humidity</dt><dd id="humidity"></dd>
+            </div>
+            <div>
+              <dt>As of</dt>
+              <dd id="local-time"></dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Astro's idiom for client behavior without a framework island: a
+      // processed <script> — bundled to a module and run on the page.
+      import { themeFor, toCelsius, toLocalTime, fetchWeather } from '../../../shared/weather.js'
+
+      const API_KEY = import.meta.env.PUBLIC_OWM_API_KEY
+      const $ = (id) => document.getElementById(id)
+
+      const scene = $('scene')
+      const query = $('query')
+      const btn = $('search-btn')
+      const error = $('error')
+      const report = $('report')
+      const demoBanner = $('demo-banner')
+      const demoBadge = $('demo-badge')
+
+      let hasResult = false
+
+      $('search-form').addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const term = query.value.trim()
+        if (!term) return
+
+        error.hidden = true
+        report.hidden = true
+        btn.disabled = true
+        btn.textContent = '...'
+
+        try {
+          const weather = await fetchWeather(term, API_KEY)
+          scene.className = `scene ${themeFor(weather)}`
+          $('city').textContent = `${weather.name}, ${weather.sys.country}`
+          $('temp').textContent = Math.round(weather.main.temp)
+          $('temp-c').textContent = `/ ${toCelsius(weather)}°C`
+          $('desc').textContent = weather.weather[0].description
+          $('clouds').textContent = `${weather.clouds.all}%`
+          $('wind').textContent =
+            `${Math.round(weather.wind.speed)} mph at ${Math.round(weather.wind.deg)}°`
+          $('humidity').textContent = `${weather.main.humidity}%`
+          $('local-time').textContent = toLocalTime(weather)
+          demoBanner.hidden = !weather.demo
+          demoBadge.style.display = weather.demo ? '' : 'none'
+          report.hidden = false
+          hasResult = true
+        } catch (e) {
+          error.textContent = e.message
+          error.hidden = false
+          report.hidden = !hasResult
+        } finally {
+          btn.disabled = false
+          btn.textContent = 'Search'
+        }
+      })
+    </script>
+  </body>
+</html>

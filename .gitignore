@@ -21,3 +21,4 @@ emulator_data/
 config.js
 environment.ts
 .angular/
+.astro/
