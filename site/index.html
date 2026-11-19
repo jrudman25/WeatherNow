@@ -23,15 +23,15 @@
       <table class="stats">
         <thead>
           <tr>
-            <th data-key="name" title="Framework folder in the repo. Click a name to open that app." data-label="Implementation">Implementation</th>
-            <th class="num" data-key="jsGzip" title="All JavaScript the build emits (files plus inline scripts), gzipped. Code-split chunks count even if they load later." data-label="JS (gzip)">JS (gzip)</th>
-            <th class="num" data-key="cssGzip" title="All CSS the build emits (files plus inline styles), gzipped." data-label="CSS (gzip)">CSS (gzip)</th>
-            <th class="num" data-key="loc" title="Source lines in the implementation folder, including config. Excludes dependencies and build output." data-label="Lines of code">Lines of code</th>
-            <th class="num" data-key="deps" title="Direct dependencies plus devDependencies in package.json." data-label="Dependencies">Dependencies</th>
-            <th class="num" data-key="buildMs" title="Wall time of npm run build during the last site build." data-label="Build">Build</th>
-            <th class="num" data-key="fcp" title="First Contentful Paint: time until the first text or image renders. Median of 5 cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport. Measured with npm run measure, not on every build." data-label="FCP">FCP</th>
-            <th class="num" data-key="lcp" title="Largest Contentful Paint: time until the largest visible element renders. Median of 5 cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport. Measured with npm run measure, not on every build." data-label="LCP">LCP</th>
-            <th class="num" data-key="tbt" title="Total Blocking Time: main-thread time after FCP spent in tasks over 50 ms, which delays input. Median of 5 cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport. Measured with npm run measure, not on every build." data-label="TBT">TBT</th>
+            <th data-key="name" title="Framework folder in the repo. Click a name to open that app." data-label="Implementation"><button type="button">Implementation</button></th>
+            <th class="num" data-key="jsGzip" title="All JavaScript the build emits (files plus inline scripts), gzipped. Code-split chunks count even if they load later." data-label="JS (gzip)"><button type="button">JS (gzip)</button></th>
+            <th class="num" data-key="cssGzip" title="All CSS the build emits (files plus inline styles), gzipped." data-label="CSS (gzip)"><button type="button">CSS (gzip)</button></th>
+            <th class="num" data-key="loc" title="Source lines in the implementation folder, including config. Excludes dependencies and build output." data-label="Lines of code"><button type="button">Lines of code</button></th>
+            <th class="num" data-key="deps" title="Direct dependencies plus devDependencies in package.json." data-label="Dependencies"><button type="button">Dependencies</button></th>
+            <th class="num" data-key="buildMs" title="Wall time of npm run build during the last site build." data-label="Build"><button type="button">Build</button></th>
+            <th class="num" data-key="fcp" title="First Contentful Paint: time until the first text or image renders. Median of 5 cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport. Measured with npm run measure, not on every build." data-label="FCP"><button type="button">FCP</button></th>
+            <th class="num" data-key="lcp" title="Largest Contentful Paint: time until the largest visible element renders. Median of 5 cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport. Measured with npm run measure, not on every build." data-label="LCP"><button type="button">LCP</button></th>
+            <th class="num" data-key="tbt" title="Total Blocking Time: main-thread time after FCP spent in tasks over 50 ms, which delays input. Median of 5 cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport. Measured with npm run measure, not on every build." data-label="TBT"><button type="button">TBT</button></th>
           </tr>
         </thead>
         <tbody id="rows">
@@ -49,8 +49,17 @@
     <script type="module">
       const KB = (n) => (n / 1024).toFixed(1) + ' kB'
       const MS = (n) => (n == null ? 'n/a' : n + ' ms')
-      const res = await fetch('stats.json')
-      const { implementations, perf } = await res.json()
+      let data
+      try {
+        const res = await fetch('stats.json')
+        if (!res.ok) throw new Error(`stats.json: HTTP ${res.status}`)
+        data = await res.json()
+      } catch (err) {
+        document.getElementById('rows').innerHTML =
+          '<tr><td colspan="9" class="loading">Could not load stats.</td></tr>'
+        throw err
+      }
+      const { implementations, perf } = data
       const rows = Object.entries(implementations).map(([name, s]) => ({ name, ...s, ...perf?.results[name] }))
       document.getElementById('count').textContent = rows.length
 
@@ -95,13 +104,13 @@
           .join('')
         headers.forEach((h) => {
           const active = h.dataset.key === sortKey
-          h.textContent = h.dataset.label + (active ? (sortAsc ? ' ▲' : ' ▼') : '')
+          h.querySelector('button').textContent = h.dataset.label + (active ? (sortAsc ? ' ▲' : ' ▼') : '')
           h.setAttribute('aria-sort', active ? (sortAsc ? 'ascending' : 'descending') : 'none')
         })
       }
 
       headers.forEach((h) =>
-        h.addEventListener('click', () => {
+        h.querySelector('button').addEventListener('click', () => {
           if (sortKey === h.dataset.key) {
             sortAsc = !sortAsc
           } else {

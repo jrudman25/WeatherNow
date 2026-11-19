@@ -67,6 +67,29 @@ body {
   opacity: 1;
 }
 
+.stats th:focus-within {
+  opacity: 1;
+}
+
+.stats th button {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  white-space: inherit;
+  text-align: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.stats th button:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.6);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
 .stats tbody tr {
   border-top: 1px solid rgb(255 255 255 / 0.08);
 }
