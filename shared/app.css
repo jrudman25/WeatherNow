@@ -236,3 +236,56 @@ dd {
   border: 1px solid rgb(255 216 138 / 0.4);
   border-radius: 999px;
 }
+
+/* Link back to the comparison landing page: a frosted pill above the
+   wordmark, matching the input/stat-card glass. The arrow is CSS-generated
+   (empty alt text) so markup stays identical across impls. On dev servers
+   / is the impl itself (or a 404 under astro's/nextjs's base path). */
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 1.25rem;
+  padding: 0.45rem 1rem 0.45rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgb(255 255 255 / 0.8);
+  text-decoration: none;
+  background: rgb(255 255 255 / 0.1);
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 999px;
+  backdrop-filter: blur(12px);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition:
+    color 0.2s,
+    background-color 0.2s,
+    outline-color 0.2s;
+}
+
+.back::before {
+  content: '\2190';
+  content: '\2190' / '';
+  transition: transform 0.2s ease;
+}
+
+.back:hover {
+  color: #fff;
+  background: rgb(255 255 255 / 0.18);
+}
+
+.back:hover::before {
+  transform: translateX(-3px);
+}
+
+.back:focus-visible {
+  outline-color: rgb(255 255 255 / 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back,
+  .back::before {
+    transition: none;
+  }
+}

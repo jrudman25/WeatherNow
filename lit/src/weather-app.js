@@ -60,6 +60,7 @@ export class WeatherApp extends LitElement {
         <div class="sky" aria-hidden="true"></div>
 
         <section class="panel">
+          <a class="back" href="/">Back to comparisons</a>
           <h1 class="wordmark">WeatherNow</h1>
 
           <form @submit=${this.search}>

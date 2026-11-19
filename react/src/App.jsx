@@ -34,6 +34,7 @@ export function App() {
       <div className="sky" aria-hidden="true"></div>
 
       <section className="panel">
+        <a className="back" href="/">Back to comparisons</a>
         <h1 className="wordmark">WeatherNow</h1>
 
         <form onSubmit={search}>
