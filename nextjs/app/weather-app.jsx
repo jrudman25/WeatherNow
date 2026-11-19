@@ -76,7 +76,7 @@ export default function WeatherApp() {
             <p className="asof">As of {localTime}</p>
             <p className="temp">
               {Math.round(weather.main.temp)}
-              <span className="deg">&deg;F</span>
+              <span className="deg">&deg;F</span>{' '}
               <em>/ {tempC}&deg;C</em>
             </p>
             <p className="desc">{weather.weather[0].description}</p>

@@ -38,13 +38,13 @@
         <p
           class="demo-banner"
           x-show="weather?.demo"
-          x-transition
+          x-transition.opacity.duration.300ms
           style="display: none"
         >
           Sample data: add an API key for live results.
         </p>
 
-        <p class="error" x-show="error" x-transition x-text="error" style="display: none"></p>
+        <p class="error" x-show="error" x-transition.opacity.duration.300ms x-text="error" style="display: none"></p>
 
         <template x-if="weather && !loading">
           <div

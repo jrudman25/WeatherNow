@@ -72,7 +72,7 @@ export function App() {
             <p class="asof">As of {toLocalTime(weather())}</p>
             <p class="temp">
               {Math.round(weather().main.temp)}
-              <span class="deg">&deg;F</span>
+              <span class="deg">&deg;F</span>{' '}
               <em>/ {toCelsius(weather())}&deg;C</em>
             </p>
             <p class="desc">{weather().weather[0].description}</p>

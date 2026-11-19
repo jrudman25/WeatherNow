@@ -70,7 +70,7 @@ export const App = component$(() => {
             <p class="asof">As of {localTime}</p>
             <p class="temp">
               {Math.round(weather.value.main.temp)}
-              <span class="deg">&deg;F</span>
+              <span class="deg">&deg;F</span>{' '}
               <em>/ {tempC}&deg;C</em>
             </p>
             <p class="desc">{weather.value.weather[0].description}</p>

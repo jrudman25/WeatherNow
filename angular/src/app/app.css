@@ -6,6 +6,7 @@
   display: block;
 }
 
+.demo-banner,
 .error,
 .report {
   animation: none;

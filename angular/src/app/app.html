@@ -35,8 +35,7 @@
         </h2>
         <p class="asof">As of {{ localTime() }}</p>
         <p class="temp">
-          {{ round(w.main.temp) }}<span class="deg">&deg;F</span>
-          <em>/ {{ tempC() }}&deg;C</em>
+          {{ round(w.main.temp) }}<span class="deg">&deg;F</span>&ngsp;<em>/ {{ tempC() }}&deg;C</em>
         </p>
         <p class="desc">{{ w.weather[0].description }}</p>
 

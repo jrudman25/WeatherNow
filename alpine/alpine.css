@@ -2,6 +2,7 @@
    without a transition system. Alpine provides x-transition instead, so the
    keyframe animations are disabled here and enter phases come from the
    classes referenced by the x-transition:* directives in index.html. */
+.demo-banner,
 .error,
 .report {
   animation: none;

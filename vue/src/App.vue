@@ -73,8 +73,7 @@ async function search() {
           </h2>
           <p class="asof">As of {{ localTime }}</p>
           <p class="temp">
-            {{ Math.round(weather.main.temp) }}<span class="deg">&deg;F</span>
-            <em>/ {{ tempC }}&deg;C</em>
+            {{ Math.round(weather.main.temp) }}<span class="deg">&deg;F</span> <em>/ {{ tempC }}&deg;C</em>
           </p>
           <p class="desc">{{ weather.weather[0].description }}</p>
 
@@ -115,6 +114,7 @@ async function search() {
    transition system. Vue's <Transition> component handles enter/leave via
    named transition classes instead, so the shared keyframes are disabled
    locally. */
+.demo-banner,
 .error,
 .report {
   animation: none;

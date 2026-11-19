@@ -114,8 +114,7 @@ export default class WeatherApp extends Component {
               </h2>
               <p class="asof">As of {{this.localTime}}</p>
               <p class="temp">
-                {{this.temp}}
-                <span class="deg">&deg;F</span>
+                {{this.temp}}<span class="deg">&deg;F</span>
                 <em>/ {{this.tempC}}&deg;C</em>
               </p>
               <p class="desc">{{this.weather.weather.[0].description}}</p>

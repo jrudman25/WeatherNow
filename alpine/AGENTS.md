@@ -25,8 +25,8 @@
 - Alpine-idiomatic directives: `x-data`, `x-model`, `x-text`, `x-show`,
   `x-if` (inside `<template>`), `:class`, `@submit.prevent`
 - Derived state is plain JS getters in the `Alpine.data` object
-- Transitions use `x-transition` (error) and `x-transition:enter` classes
-  (report); `alpine.css` disables the keyframe animations in `shared/app.css`
+- Transitions use `x-transition.opacity.duration.300ms` (demo banner, error)
+  and `x-transition:enter` classes (report); `alpine.css` disables the keyframe animations in `shared/app.css`
   and defines the transition classes instead
 - API key: no `.env` without a bundler — `config.js` (gitignored) sets
   `window.CONFIG.API_KEY`; `config.example.js` documents the shape

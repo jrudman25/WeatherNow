@@ -119,9 +119,10 @@ button:disabled {
   cursor: wait;
 }
 
-/* Svelte uses transition:fade / in:fly directives; Preact has no built-in
-   transition system, so mount animations are plain CSS keyframes. The
-   report's key={weather.dt} forces a remount per search to replay it. */
+/* Mount animations are plain CSS keyframes by default. Impls with their own
+   transition system (Svelte, Vue, Alpine, Angular) set animation: none on
+   the elements they animate themselves. The rest replay the keyframes
+   because the element remounts or is unhidden on each search. */
 .error {
   margin-top: 1rem;
   color: #ffd7d7;
@@ -226,6 +227,7 @@ dd {
 .demo-banner {
   margin-top: 1rem;
   padding: 0.6rem 1rem;
+  animation: fade-in 0.3s ease;
   font-size: 0.8rem;
   color: #ffd88a;
   background: rgb(255 216 138 / 0.12);
