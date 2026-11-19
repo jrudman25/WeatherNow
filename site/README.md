@@ -12,7 +12,7 @@ search render) from `npm run measure`.
 npm run build     # builds every impl, stages dist/<name>/, emits stats.json
 npm run stage     # re-stages from existing impl dist/ output (no rebuilds)
 npm run preview   # serves dist/ on http://localhost:5180
-npm run measure   # throttled FCP/LCP/TBT per impl -> perf.json (needs Chrome)
+npm run measure   # throttled FCP/busy/render per impl -> perf.json (needs Chrome)
 ```
 
 `build.mjs` runs `npm run build` inside each implementation directory, so impl
