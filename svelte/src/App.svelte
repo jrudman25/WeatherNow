@@ -56,7 +56,7 @@
     {/if}
 
     {#if error}
-      <p class="error" transition:fade>{error}</p>
+      <p class="error" transition:fade={{ duration: 300 }}>{error}</p>
     {/if}
 
     {#if weather && !loading}
@@ -81,3 +81,15 @@
     {/if}
   </section>
 </main>
+
+<style>
+  /* shared/app.css uses keyframe mount animations for frameworks without a
+     transition system. Svelte's fade/fly read the element's computed
+     opacity as their target, so the running keyframe (opacity 0 on its
+     first frame) made them animate 0 to 0 and then pop in. The shared
+     keyframes are disabled locally so the directives own enter/leave. */
+  .error,
+  .report {
+    animation: none;
+  }
+</style>

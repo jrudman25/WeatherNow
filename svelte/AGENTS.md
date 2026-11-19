@@ -23,6 +23,9 @@
   `onsubmit` (not the Svelte 4 `on:` syntax)
 - Secrets go in `.env` as `VITE_*` vars, read via `import.meta.env`. Never
   commit `.env`; `.env.example` documents required keys
+- Transitions use `svelte/transition` (`transition:fade`, `in:fly`); the
+  component `<style>` disables the shared keyframe animations, which would
+  otherwise zero out the computed opacity the directives animate toward
 - Weather themes map OpenWeatherMap `weather.main` groups to CSS classes that
   set `--c1`/`--c2` gradient stops on `.scene` (defined in `shared/`)
 - npm `min-release-age` is 7 days; pin new deps to versions published at least
