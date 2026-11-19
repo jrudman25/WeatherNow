@@ -131,7 +131,6 @@ writeFileSync(
   'dist/stats.json',
   JSON.stringify({ generated: new Date().toISOString(), implementations, perf }, null, 2)
 )
-for (const f of ['index.html', 'site.css']) cpSync(f, join('dist', f))
-cpSync('../svelte/public/favicon.ico', 'dist/favicon.ico')
+for (const f of ['index.html', 'site.css', 'favicon.ico']) cpSync(f, join('dist', f))
 
 console.log('\nsite/dist staged:', Object.keys(implementations).join(', '))
