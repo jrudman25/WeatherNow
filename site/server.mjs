@@ -4,6 +4,8 @@ import { createReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
 import { extname, join } from 'node:path'
 
+const PORT = Number(process.env.PORT) || 5180
+
 const TYPES = {
   '.html': 'text/html',
   '.css': 'text/css',
@@ -40,4 +42,4 @@ createServer(async (req, res) => {
     res.writeHead(404)
     res.end('not found')
   }
-}).listen(5180, () => console.log('http://localhost:5180'))
+}).listen(PORT, () => console.log(`http://localhost:${PORT}`))

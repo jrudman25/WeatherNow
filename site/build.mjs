@@ -5,6 +5,7 @@
 import { execSync } from 'node:child_process'
 import {
   cpSync,
+  existsSync,
   mkdirSync,
   readdirSync,
   readFileSync,
@@ -122,9 +123,12 @@ for (const impl of IMPLS) {
   }
 }
 
+// Load-time metrics come from `npm run measure` (needs Chrome), not the build,
+// so the last committed perf.json is carried into every build's stats.json
+const perf = existsSync('perf.json') ? JSON.parse(readFileSync('perf.json', 'utf8')) : null
 writeFileSync(
   'dist/stats.json',
-  JSON.stringify({ generated: new Date().toISOString(), implementations }, null, 2)
+  JSON.stringify({ generated: new Date().toISOString(), implementations, perf }, null, 2)
 )
 for (const f of ['index.html', 'site.css']) cpSync(f, join('dist', f))
 cpSync('../svelte/public/favicon.ico', 'dist/favicon.ico')

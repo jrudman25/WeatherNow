@@ -1,0 +1,82 @@
+{
+  "measured": "2026-11-19T04:59:10.735Z",
+  "chrome": "157.0.8103.79",
+  "runs": 5,
+  "profile": {
+    "latencyMs": 562.5,
+    "downloadKbps": 1474.56,
+    "uploadKbps": 675,
+    "cpuSlowdown": 4
+  },
+  "viewport": {
+    "width": 412,
+    "height": 823
+  },
+  "results": {
+    "svelte": {
+      "fcp": 1852,
+      "lcp": 1852,
+      "tbt": 92
+    },
+    "react": {
+      "fcp": 3620,
+      "lcp": 3620,
+      "tbt": 35
+    },
+    "solid": {
+      "fcp": 1656,
+      "lcp": 1656,
+      "tbt": 46
+    },
+    "preact": {
+      "fcp": 1648,
+      "lcp": 1648,
+      "tbt": 31
+    },
+    "vue": {
+      "fcp": 2068,
+      "lcp": 2068,
+      "tbt": 58
+    },
+    "lit": {
+      "fcp": 1864,
+      "lcp": 1864,
+      "tbt": 40
+    },
+    "qwik": {
+      "fcp": 5584,
+      "lcp": 5584,
+      "tbt": 0
+    },
+    "astro": {
+      "fcp": 992,
+      "lcp": 992,
+      "tbt": 0
+    },
+    "ember": {
+      "fcp": 6664,
+      "lcp": 6664,
+      "tbt": 23
+    },
+    "nextjs": {
+      "fcp": 1616,
+      "lcp": 1616,
+      "tbt": 3074
+    },
+    "alpine": {
+      "fcp": 1560,
+      "lcp": 1560,
+      "tbt": 150
+    },
+    "vanilla": {
+      "fcp": 1568,
+      "lcp": 1568,
+      "tbt": 39
+    },
+    "angular": {
+      "fcp": 3084,
+      "lcp": 3084,
+      "tbt": 42
+    }
+  }
+}

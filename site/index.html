@@ -29,25 +29,29 @@
             <th class="num" data-key="loc" title="Source lines in the implementation folder, including config. Excludes dependencies and build output." data-label="Lines of code">Lines of code</th>
             <th class="num" data-key="deps" title="Direct dependencies plus devDependencies in package.json." data-label="Dependencies">Dependencies</th>
             <th class="num" data-key="buildMs" title="Wall time of npm run build during the last site build." data-label="Build">Build</th>
+            <th class="num" data-key="fcp" title="First Contentful Paint: time until the first text or image renders. Median of 5 cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport. Measured with npm run measure, not on every build." data-label="FCP">FCP</th>
+            <th class="num" data-key="lcp" title="Largest Contentful Paint: time until the largest visible element renders. Median of 5 cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport. Measured with npm run measure, not on every build." data-label="LCP">LCP</th>
+            <th class="num" data-key="tbt" title="Total Blocking Time: main-thread time after FCP spent in tasks over 50 ms, which delays input. Median of 5 cold loads in Chrome, throttled to Slow 4G and a 4x CPU slowdown at a 412px mobile viewport. Measured with npm run measure, not on every build." data-label="TBT">TBT</th>
           </tr>
         </thead>
         <tbody id="rows">
-          <tr><td colspan="6" class="loading">loading stats…</td></tr>
+          <tr><td colspan="9" class="loading">loading stats…</td></tr>
         </tbody>
       </table>
 
       <p class="foot">
         Every implementation renders the identical app from
         <a href="https://github.com/jrudman25/WeatherNow">shared code</a>; only the
-        framework's expression differs. Stats regenerate on each build.
+        framework's expression differs. Stats regenerate on each build<span id="measured"></span>.
       </p>
     </main>
 
     <script type="module">
       const KB = (n) => (n / 1024).toFixed(1) + ' kB'
+      const MS = (n) => (n == null ? 'n/a' : n + ' ms')
       const res = await fetch('stats.json')
-      const { implementations } = await res.json()
-      const rows = Object.entries(implementations).map(([name, s]) => ({ name, ...s }))
+      const { implementations, perf } = await res.json()
+      const rows = Object.entries(implementations).map(([name, s]) => ({ name, ...s, ...perf?.results[name] }))
       document.getElementById('count').textContent = rows.length
 
       const tbody = document.getElementById('rows')
@@ -62,6 +66,9 @@
         loc: (r) => r.loc,
         deps: (r) => r.deps,
         buildMs: (r) => (r.buildMs === null ? 'n/a' : (r.buildMs / 1000).toFixed(1) + 's'),
+        fcp: (r) => MS(r.fcp),
+        lcp: (r) => MS(r.lcp),
+        tbt: (r) => MS(r.tbt),
       }
 
       function render() {
@@ -80,6 +87,9 @@
             <td class="num">${fmt.loc(r)}</td>
             <td class="num">${fmt.deps(r)}</td>
             <td class="num">${fmt.buildMs(r)}</td>
+            <td class="num">${fmt.fcp(r)}</td>
+            <td class="num">${fmt.lcp(r)}</td>
+            <td class="num">${fmt.tbt(r)}</td>
           </tr>`
           )
           .join('')
@@ -101,6 +111,7 @@
           render()
         })
       )
+      if (perf) document.getElementById('measured').textContent = '; load times measured ' + perf.measured.slice(0, 10)
       render()
     </script>
   </body>

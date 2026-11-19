@@ -36,7 +36,8 @@ the current weather.
   `package.json`, `README.md`, and `AGENTS.md`
 - `site/` — the aggregate comparison site and the repo's single deployable
   artifact: a vanilla HTML/JS landing page linking every implementation with
-  live stats (bundle size, lines of code, dependencies, build time)
+  live stats (bundle size, lines of code, dependencies, build time, and
+  throttled load times: FCP, LCP, TBT)
 
 ## Running an implementation
 
@@ -68,7 +69,10 @@ npm run preview  # serves dist/ on http://localhost:5180
 
 Impl dependencies must be installed first (`npm install` per impl, once).
 `npm run stage` re-stages the site from existing impl `dist/` output without
-rebuilding. Deploys to Firebase Hosting with `firebase deploy` from `site/`.
+rebuilding. `npm install` in `site/` then `npm run measure` (after a build or
+stage) re-measures load times in your installed Chrome and writes
+`site/perf.json`, which later builds carry into `stats.json`. Deploys to
+Firebase Hosting with `firebase deploy` from `site/`.
 
 ## API key (optional)
 

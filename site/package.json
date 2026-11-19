@@ -6,6 +6,10 @@
   "scripts": {
     "build": "node build.mjs",
     "stage": "node build.mjs --skip-builds",
-    "preview": "node server.mjs"
+    "preview": "node server.mjs",
+    "measure": "node measure.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "1.65.0"
   }
 }

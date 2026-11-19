@@ -72,7 +72,9 @@
   `out/`; Alpine:
   `build.mjs` stages `dist/` preserving the `shared/` sibling layout)
 - `cd site && npm run build` - full site build; `npm run stage` re-stages
-  from existing impl output; `npm run preview` serves `dist/` on :5180
+  from existing impl output; `npm run preview` serves `dist/` on :5180;
+  `npm run measure` refreshes committed `site/perf.json` (local Chrome via
+  `playwright-core`; never run in CI)
 
 ## Notes
 

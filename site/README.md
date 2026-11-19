@@ -11,10 +11,17 @@ build time.
 npm run build     # builds every impl, stages dist/<name>/, emits stats.json
 npm run stage     # re-stages from existing impl dist/ output (no rebuilds)
 npm run preview   # serves dist/ on http://localhost:5180
+npm run measure   # throttled FCP/LCP/TBT per impl -> perf.json (needs Chrome)
 ```
 
 `build.mjs` runs `npm run build` inside each implementation directory, so impl
 dependencies must be installed first (`npm install` per impl, once).
+
+`npm run measure` needs `npm install` in `site/` and a local Google Chrome
+install. It loads each staged impl 5 times cold, throttled to Lighthouse's
+mobile profile (Slow 4G, 4x CPU slowdown), and writes the medians to
+`perf.json`. Commit `perf.json`: builds, including CI deploys, copy it into
+`stats.json`, so load times only change when someone re-measures.
 
 ## Deploy
 
