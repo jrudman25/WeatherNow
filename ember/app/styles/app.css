@@ -1,0 +1,3 @@
+/* Global stylesheet is ../../shared/app.css, imported in app.js so it goes
+   through the real vite pipeline (embroider's virtual app.css doesn't
+   resolve @import). */
