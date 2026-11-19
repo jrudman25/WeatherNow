@@ -35,6 +35,3 @@
 
 - Firebase deploy config lives at `../site/` (moved out of this impl when the
   repo became a playground); run `firebase deploy` from `site/`, not here
-- `npm audit` reports high-severity picomatch ReDoS (GHSA-fc5q-39xc-vjpf)
-  via vite's tinyglobby/fdir; build-time only, the only offered fix is a
-  breaking vite downgrade (same across all Vite impls and angular)

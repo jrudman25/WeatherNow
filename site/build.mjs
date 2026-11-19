@@ -1,5 +1,6 @@
 // Builds every implementation, stages each dist/ under site/dist/<name>/,
-// and emits dist/stats.json (bundle sizes, LOC, dep count, build time).
+// and emits dist/stats.json (bundle sizes, LOC, dep count, build time,
+// plus the committed perf.json load times).
 // `node build.mjs --skip-builds` re-stages from existing dist/ output without
 // rebuilding — useful when iterating on the landing page.
 import { execSync } from 'node:child_process'

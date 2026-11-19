@@ -2,8 +2,9 @@
 
 The aggregate comparison site — the repo's single deployable artifact. A
 vanilla HTML/JS landing page links every implementation and shows live
-comparison stats (bundle size, LOC, dependency count, build time) generated at
-build time.
+comparison stats: bundle size, LOC, dependency count, and build time
+generated at build time, plus throttled load times (FCP, LCP, TBT) from
+`npm run measure`.
 
 ## Build and preview
 

@@ -45,9 +45,3 @@
   documents required keys
 - npm `min-release-age` is 7 days; pin new deps to versions published at
   least a week ago
-
-## Notes
-
-- `npm audit` reports high-severity picomatch ReDoS (GHSA-fc5q-39xc-vjpf)
-  via vite's tinyglobby/fdir; build-time only, no offered fix short of a
-  breaking vite downgrade (same across all Vite impls and angular)
