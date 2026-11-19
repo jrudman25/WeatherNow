@@ -18,6 +18,10 @@ the current weather.
 | `preact/` | Preact 11 (hooks) | Vite |
 | `vue/` | Vue 3 (Composition API, `<script setup>`) | Vite |
 | `lit/` | Lit 3 (Web Components, shadow DOM) | Vite, no plugin |
+| `qwik/` | Qwik 1 (resumability, `component$` + signals) | Vite 7 (Qwik caps at <8), CSR mode |
+| `astro/` | Astro 7 (static HTML + client `<script>`) | Astro CLI, `base: '/astro'` |
+| `ember/` | Ember 7 Octane (GJS template-tag, `@tracked`) | Vite + Embroider |
+| `nextjs/` | Next.js 16 + React 19 (App Router, `'use client'`) | Turbopack, `output: 'export'` |
 | `alpine/` | Alpine.js 3 (vendored) | No build step — `server.mjs` |
 | `vanilla/` | Plain DOM APIs (baseline) | No build step — `server.mjs` |
 | `angular/` | Angular 22 (standalone, signals, zoneless) + TypeScript | Angular CLI (`angular.json`) |
@@ -37,7 +41,7 @@ the current weather.
 ## Running an implementation
 
 ```sh
-cd svelte          # or react, solid, preact, vue, lit
+cd svelte          # or react, solid, preact, vue, lit, qwik, ember
 npm install
 npm run dev
 ```
@@ -47,6 +51,12 @@ dev`, then open http://localhost:5176 (vanilla: http://localhost:5179).
 
 Angular uses its own toolchain: `cd angular && npm install && npm run dev`,
 then open http://localhost:4200.
+
+Astro uses its own toolchain too: `cd astro && npm install && npm run dev`,
+then open http://localhost:4321/astro/.
+
+Next.js as well: `cd nextjs && npm install && npm run dev`, then open
+http://localhost:3000/nextjs.
 
 ## Building the comparison site
 
@@ -64,6 +74,7 @@ rebuilding. Deploys to Firebase Hosting with `firebase deploy` from `site/`.
 
 Implementations read an OpenWeatherMap key through whatever convention fits
 the stack — `.env` with `VITE_OWM_API_KEY` for the Vite apps,
+`PUBLIC_OWM_API_KEY` for Astro, `NEXT_PUBLIC_OWM_API_KEY` for Next.js,
 `config.js` for Alpine and Vanilla, `src/environments/environment.ts` for
 Angular. Each folder includes an `*.example` file documenting its format.
 

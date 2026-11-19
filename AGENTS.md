@@ -20,8 +20,11 @@
 - `site/` is the aggregate comparison site and single deployable artifact —
   vanilla HTML/JS landing page with no dependencies. `build.mjs` builds every
   impl, stages `dist/<name>/`, and emits `stats.json`
-- Other top-level folders (`django/`, `nextjs/`, etc.) are empty placeholders
-  for future implementations.
+- Empty top-level folders (`jquery/`, `nuxt/`) are local placeholders for
+  future implementations; git doesn't track them until they have files.
+- Every impl renders `<a class="back" href="/">Back to comparisons</a>` as
+  the first child of `.panel`; styling (including the arrow) lives in
+  `shared/app.css`.
 
 ## Conventions
 
@@ -34,6 +37,10 @@
 - Secret API keys by stack convention, all gitignored with a committed
   `*.example` file documenting each format:
   - Vite impls: `.env` with `VITE_OWM_API_KEY`, read via `import.meta.env`
+  - `astro/`: `.env` with `PUBLIC_OWM_API_KEY` (Astro exposes only
+    `PUBLIC_*` vars to client scripts)
+  - `nextjs/`: `.env` with `NEXT_PUBLIC_OWM_API_KEY` (Next exposes only
+    `NEXT_PUBLIC_*` vars to client code)
   - `alpine/` and `vanilla/` (no bundler): `config.js` setting
     `window.CONFIG.API_KEY`
   - `angular/`: `src/environments/environment.ts`
@@ -43,8 +50,11 @@
 - Impls build with relative asset URLs so they work at `/<name>/` subpaths
   under `site/dist/`: `base: './'` in vite.config (`lit/` uses
   `vite build --base=./` to keep its no-config story), `baseHref` in
-  angular.json; `alpine/`'s `<base href="/alpine/">` and `vanilla/`'s
-  `<base href="/vanilla/">` already align
+  angular.json; `alpine/`'s `<base href="/alpine/">`, `vanilla/`'s
+  `<base href="/vanilla/">`, `astro/`'s `base: '/astro'` (Astro has no
+  relative-base option), and `nextjs/`'s `basePath: '/nextjs'` already align
+- New impls may need a `Cache-Control` rule in `site/firebase.json`
+  (unhashed output → `/<name>/**` `no-cache`); see `site/AGENTS.md`
 - npm `min-release-age` is 7 days globally; pin new deps to versions
   published at least a week ago
 - `.gitattributes` normalizes text files to LF on commit
@@ -52,10 +62,14 @@
 ## Commands
 
 - Per impl: `cd <impl> && npm install && npm run dev`
-  - Vite impls (svelte, react, solid, preact, vue, lit): Vite dev server
+  - Vite impls (svelte, react, solid, preact, vue, lit, qwik, ember):
+    Vite dev server
   - `alpine/`: `server.mjs` on :5176; `vanilla/`: `server.mjs` on :5179
   - `angular/`: `ng serve` on :4200
-- `npm run build` produces `dist/` (Angular: `dist/browser/`; Alpine:
+  - `astro/`: `astro dev` on :4321 (serves at `/astro/`)
+  - `nextjs/`: `next dev` on :3000 (serves at `/nextjs`)
+- `npm run build` produces `dist/` (Angular: `dist/browser/`; Next.js:
+  `out/`; Alpine:
   `build.mjs` stages `dist/` preserving the `shared/` sibling layout)
 - `cd site && npm run build` - full site build; `npm run stage` re-stages
   from existing impl output; `npm run preview` serves `dist/` on :5180
